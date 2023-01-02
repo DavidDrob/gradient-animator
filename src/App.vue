@@ -76,7 +76,6 @@ const width = ref(384);
 const height = ref(384);
 
 function positionHandler(e) {
-  console.log(e);
   const element = parseInt(e.cmp.dragElements[0].id);
   const id = gradients.value.findIndex((gradient) => gradient.id === element);
 
@@ -120,7 +119,7 @@ function onDrop(dropResult) {
   <div class="bg-slate-900 h-screen flex items-start">
     <div class="w-full flex justify-between items-center mx-32 mt-20">
       <div class="p-8 border-2 border-dashed border-gray-500/50">
-        <div class="w-96 h-96 border-2 border-gray-500 relative">
+        <div class="w-96 h-96 border border-gray-500 relative">
           <div class="w-96 h-96" id="gradient" :style="cssString()">
             <vue-resizable
               v-for="gradient in gradients"
@@ -155,9 +154,12 @@ function onDrop(dropResult) {
             w-full
             px-16
             py-4
+            h-[36rem]
+            rounded-md
             bg-gray-700
             text-white
-            flex flex-col flex-wrap
+            overflow-auto
+            flex flex-col flex-nowrap
           "
         >
           <Container
@@ -208,7 +210,7 @@ function onDrop(dropResult) {
                 </div>
               </div>
             </Draggable>
-            <div class="flex items-center py-2">
+            <div class="flex flex-col items-center py-2">
               <div class="flex flex-col bg-slate-800 w-full rounded-md py-2">
                 <p>Background Color</p>
                 <div class="w-full flex justify-center">
@@ -216,33 +218,23 @@ function onDrop(dropResult) {
                   <h1>{{ bgColor }}</h1>
                 </div>
               </div>
+              <div class="w-full mt-4 flex justify-center">
+                <button
+                  class="py-2 bg-green-400 w-1/2 rounded-md"
+                  @click="createGradient"
+                >
+                  Add
+                </button>
+              </div>
             </div>
           </Container>
-          <div class="mt-auto flex justify-center">
-            <button
-              class="py-2 bg-green-400 w-1/2 rounded-md"
-              @click="createGradient"
-            >
-              Add
-            </button>
-          </div>
         </div>
       </div>
     </div>
-    <div
-      class="
-        absolute
-        bottom-2
-        w-full
-        text-white
-        font-semibold
-        bg-slate-600
-        px-4
-      "
-    >
-      <span>Copy the CSS</span> <br />
-      <span>{{ cssString() }}</span>
-    </div>
+  </div>
+  <div class="-mt-12 w-full text-white font-semibold bg-slate-600 px-4">
+    <span>Copy the CSS</span> <br />
+    <span>{{ cssString() }}</span>
   </div>
 </template>
 
