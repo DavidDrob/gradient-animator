@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, watch, onMounted } from "vue";
 import Settings from "./components/Settings.vue";
 import VueResizable from "vue-resizable";
 import { Container, Draggable } from "vue-dndrop";
@@ -10,10 +10,11 @@ const gradients = ref([
   {
     id: 0,
     color: "#26d723",
-    xPosition: 20,
-    yPosition: 20,
+    xPosition: 80,
+    yPosition: 80,
     strength: 0,
     hidden: false,
+    endpoints: [],
   },
   {
     id: 1,
@@ -22,8 +23,26 @@ const gradients = ref([
     yPosition: 80,
     strength: 0,
     hidden: false,
+    endpoints: [
+      {
+        xPosition: 100,
+        yPosition: 20,
+        time: 2,
+      },
+    ],
   },
 ]);
+const animationsEnabledGlobally = ref(false);
+
+watch(animationsEnabledGlobally, async (newValue, oldValue) => {
+  if (newValue) changeAnimations();
+});
+
+onMounted(() => {
+  gradients.value.forEach((gradient) => {
+    initCSSVariables(gradient.id, gradient.xPosition, gradient.yPosition);
+  });
+});
 
 function createGradient() {
   gradients.value.push({
@@ -33,6 +52,7 @@ function createGradient() {
     yPosition: 80,
     strength: 0,
     hidden: false,
+    endpoints: [],
   });
 }
 
@@ -55,20 +75,75 @@ const cssString = () => {
   gradients.value.forEach((gradient) => {
     if (gradient.hidden) return;
     baseString += createCSS(
+      gradient.id,
       gradient.xPosition,
       gradient.yPosition,
       gradient.color,
-      gradient.strength
+      gradient.strength,
+      gradient.endpoints.length > 0 && animationsEnabledGlobally.value
     );
   });
-  // remove comma at the end of the string
   return baseString + bgColor.value;
 };
 
-function createCSS(x, y, color, strength) {
-  return `radial-gradient(100% 100% at ${parseInt(x)}% ${parseInt(
-    y
-  )}%, ${color} ${strength}%, transparent),`;
+function createCSS(id, x, y, color, strength, animationsEnabled) {
+  return `radial-gradient(100% 100% at ${
+    animationsEnabled
+      ? `var(--${id}-x-position) var(--${id}-y-position)`
+      : `${parseInt(x)}% ${parseInt(y)}%`
+  }, ${color} ${strength}%, transparent),`;
+}
+
+function changeAnimations() {
+  const keyFrames = document.createElement("style");
+
+  gradients.value.forEach((gradient) => {
+    if (gradient.endpoints.length < 1 || !animationsEnabledGlobally.value)
+      return;
+    else {
+      // TODO: remove old property when creating a new one
+      window.CSS.registerProperty({
+        name: `--${gradient.id}-x-position`,
+        syntax: "<percentage>",
+        inherits: false,
+        initialValue: gradient.xPosition + "%",
+      });
+
+      window.CSS.registerProperty({
+        name: `--${gradient.id}-y-position`,
+        syntax: "<percentage>",
+        inherits: false,
+        initialValue: gradient.yPosition + "%",
+      });
+      console.log(1);
+    }
+    document.documentElement.style.setProperty(
+      `--${gradient.id}-x-position`,
+      gradient.xPosition + "%"
+    );
+    document.documentElement.style.setProperty(
+      `--${gradient.id}-y-position`,
+      gradient.yPosition + "%"
+    );
+    keyFrames.innerHTML = `
+      @keyframes main {
+          100% {
+            --${gradient.id}-x-position: ${gradient.endpoints[0].xPosition}%;
+            --${gradient.id}-y-position: ${gradient.endpoints[0].yPosition}%;
+          }
+        }  
+    `;
+  });
+
+  document.head.appendChild(keyFrames);
+}
+
+// creates CSS variables and properties for gradients with animations
+function initCSSVariables(id, x, y) {
+  if (gradients.value[id].endpoints.length > 0) {
+    document.documentElement.style.setProperty(`--${id}-x-position`, x + "%");
+    document.documentElement.style.setProperty(`--${id}-y-position`, y + "%");
+  }
 }
 
 // TODO: adjust to canvas size
@@ -87,6 +162,7 @@ function positionHandler(e) {
   // else if (newX <= 110) gradients.value[id].xPosition = -5;
   // else if (newX >= -10) gradients.value[id].xPosition = 105;
   if (newY >= -10 && newY <= 110) gradients.value[id].yPosition = newY;
+  initCSSVariables(id, newX, newY);
   // else if (newY <= 110) gradients.value[id].yPosition = -5;
   // else if (newY >= -10) gradients.value[id].yPosition = 105;
 }
@@ -230,6 +306,57 @@ function onDrop(dropResult) {
           </Container>
         </div>
       </div>
+
+      <div class="bg-slate-900">
+        <div
+          class="
+            w-full
+            px-16
+            py-4
+            h-[36rem]
+            rounded-md
+            bg-gray-700
+            text-white
+            overflow-auto
+            flex flex-col flex-nowrap
+          "
+        >
+          <div class="flex bg-slate-800">
+            <!-- <input type="radio" v-model="animationsEnabledGlobally" /> -->
+            <input type="checkbox" v-model="animationsEnabledGlobally" />
+            <div
+              class="flex flex-col px-6"
+              v-for="(gradient, index) in gradients"
+              :key="index"
+            >
+              <div v-if="gradient.endpoints.length">
+                <div
+                  v-for="(endpoint, index) in gradient.endpoints"
+                  :key="index"
+                >
+                  <input
+                    type="number"
+                    class="bg-slate-700"
+                    v-model="endpoint.xPosition"
+                    @change="changeAnimations"
+                    min="1"
+                    max="100"
+                  />
+                  <br />
+                  <input
+                    type="number"
+                    class="bg-slate-700"
+                    v-model="endpoint.yPosition"
+                    @change="changeAnimations"
+                    min="1"
+                    max="100"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <div class="-mt-12 w-full text-white font-semibold bg-slate-600 px-4">
@@ -247,17 +374,9 @@ function onDrop(dropResult) {
   color: #2c3e50;
 }
 
-/* @keyframes example {
-  from {
-    background-color: red;
-  }
-  to {
-    background-color: yellow;
-  }
-}
-
 #gradient {
-  animation-name: example;
-  animation-duration: 4s;
-} */
+  animation-name: main;
+  animation-iteration-count: infinite;
+  animation-duration: 2s;
+}
 </style>
