@@ -96,40 +96,62 @@ function createCSS(id, x, y, color, strength, animationsEnabled) {
 
 function changeAnimations() {
   const keyFrames = document.createElement("style");
+  let newGradient;
 
   gradients.value.forEach((gradient) => {
     if (gradient.endpoints.length < 1 || !animationsEnabledGlobally.value)
       return;
     else {
-      // TODO: remove old property when creating a new one
-      window.CSS.registerProperty({
-        name: `--${gradient.id}-x-position`,
-        syntax: "<percentage>",
-        inherits: false,
-        initialValue: gradient.xPosition + "%",
-      });
+      // A CSS property can not be updated or re-registered in JS
+      // that means a new property with a new ID has to be created
+      // @dev creates a gradient with the same options and a new ID
+      if (
+        document.documentElement.style.getPropertyValue(
+          `--${gradient.id}-x-position`
+        )
+      ) {
+        removeGradient(gradient.id);
 
-      window.CSS.registerProperty({
-        name: `--${gradient.id}-y-position`,
-        syntax: "<percentage>",
-        inherits: false,
-        initialValue: gradient.yPosition + "%",
-      });
-      console.log(1);
+        newGradient = {
+          id: gradient.id + 100,
+          color: gradient.color,
+          xPosition: gradient.xPosition,
+          yPosition: gradient.yPosition,
+          strength: gradient.strength,
+          hidden: gradient.hidden,
+          endpoints: gradient.endpoints,
+        };
+        gradients.value.push(newGradient);
+
+        window.CSS.registerProperty({
+          name: `--${newGradient.id}-x-position`,
+          syntax: "<percentage>",
+          inherits: false,
+          initialValue: newGradient.xPosition + "%",
+        });
+
+        window.CSS.registerProperty({
+          name: `--${newGradient.id}-y-position`,
+          syntax: "<percentage>",
+          inherits: false,
+          initialValue: newGradient.yPosition + "%",
+        });
+      }
     }
+
     document.documentElement.style.setProperty(
-      `--${gradient.id}-x-position`,
-      gradient.xPosition + "%"
+      `--${newGradient.id}-x-position`,
+      newGradient.xPosition + "%"
     );
     document.documentElement.style.setProperty(
-      `--${gradient.id}-y-position`,
-      gradient.yPosition + "%"
+      `--${newGradient.id}-y-position`,
+      newGradient.yPosition + "%"
     );
     keyFrames.innerHTML = `
       @keyframes main {
           100% {
-            --${gradient.id}-x-position: ${gradient.endpoints[0].xPosition}%;
-            --${gradient.id}-y-position: ${gradient.endpoints[0].yPosition}%;
+            --${newGradient.id}-x-position: ${newGradient.endpoints[0].xPosition}%;
+            --${newGradient.id}-y-position: ${newGradient.endpoints[0].yPosition}%;
           }
         }  
     `;
@@ -141,6 +163,22 @@ function changeAnimations() {
 // creates CSS variables and properties for gradients with animations
 function initCSSVariables(id, x, y) {
   if (gradients.value[id].endpoints.length > 0) {
+    try {
+      window.CSS.registerProperty({
+        name: `--${id}-x-position`,
+        syntax: "<percentage>",
+        inherits: false,
+        initialValue: x + "%",
+      });
+
+      window.CSS.registerProperty({
+        name: `--${id}-y-position`,
+        syntax: "<percentage>",
+        inherits: false,
+        initialValue: y + "%",
+      });
+    } catch (e) {}
+
     document.documentElement.style.setProperty(`--${id}-x-position`, x + "%");
     document.documentElement.style.setProperty(`--${id}-y-position`, y + "%");
   }
@@ -162,7 +200,6 @@ function positionHandler(e) {
   // else if (newX <= 110) gradients.value[id].xPosition = -5;
   // else if (newX >= -10) gradients.value[id].xPosition = 105;
   if (newY >= -10 && newY <= 110) gradients.value[id].yPosition = newY;
-  initCSSVariables(id, newX, newY);
   // else if (newY <= 110) gradients.value[id].yPosition = -5;
   // else if (newY >= -10) gradients.value[id].yPosition = 105;
 }
