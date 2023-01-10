@@ -20,6 +20,11 @@ const gradients = ref([
         yPosition: 20,
         time: 2,
       },
+      {
+        xPosition: 21,
+        yPosition: 20,
+        time: 2,
+      },
     ],
   },
   {
@@ -39,6 +44,7 @@ const gradients = ref([
   },
 ]);
 const animationsEnabledGlobally = ref(false);
+const openKeypoint = ref(false);
 
 watch(animationsEnabledGlobally, async (newValue, oldValue) => {
   let ids = [];
@@ -127,6 +133,8 @@ function changeAnimations(id) {
       hidden: gradient.hidden,
       endpoints: gradient.endpoints,
     };
+
+    if (openKeypoint.value === id) openKeypoint.value = newGradient.id;
 
     removeGradient(id);
     gradients.value.push(newGradient);
@@ -368,43 +376,82 @@ function onDrop(dropResult) {
             flex flex-col flex-nowrap
           "
         >
-          <p class="text-red-500">
+          <!-- <p class="text-red-500">
             Experimental feature - doesn't work in Safari, Firefox
-          </p>
-          <div class="flex bg-slate-800">
+          </p> -->
+          <div class="flex">
             <input type="checkbox" v-model="animationsEnabledGlobally" />
+            <p class="pl-4">animations enabled</p>
+          </div>
+          <div
+            class="my-2 bg-slate-800 rounded-md"
+            v-for="gradient in gradients"
+            :key="gradient.id"
+          >
             <div
-              class="flex flex-col px-6"
-              v-for="(gradient, index) in gradients"
-              :key="index"
+              v-if="openKeypoint === false"
+              @click="openKeypoint = gradient.id"
+              class="
+                flex
+                justify-between
+                px-4
+                py-2
+                w-full
+                rounded-md
+                cursor-pointer
+              "
             >
-              <div v-if="gradient.endpoints.length">
-                <div
-                  v-for="(endpoint, index) in gradient.endpoints"
-                  :key="index"
-                >
-                  {{ gradient.id }}
-                  {{ endpoint }}
-                  <input
-                    type="number"
-                    class="bg-slate-700"
-                    v-model="endpoint.xPosition"
-                    @change="changeAnimations"
-                    min="1"
-                    max="100"
-                  />
-                  <br />
-                  <input
-                    type="number"
-                    class="bg-slate-700"
-                    v-model="endpoint.yPosition"
-                    @change="changeAnimations"
-                    min="1"
-                    max="100"
-                  />
-                </div>
+              <div
+                class="w-6 h-6 rounded-sm"
+                :style="'background-color:' + gradient.color"
+              ></div>
+              edit keyframes
+            </div>
+          </div>
+          <div
+            v-if="openKeypoint || openKeypoint === 0"
+            class="pb-4 bg-slate-600 px-6 pt-3 rounded-md"
+          >
+            <i @click="openKeypoint = false">close</i>
+            <div
+              v-for="(endpoint, index) in gradients.find(
+                (g) => g.id === openKeypoint
+              ).endpoints"
+              :key="index"
+              class="mb-6"
+            >
+              <div class="bg-slate-800 rounded-md py-2 px-4 mb-3">
+                <p>
+                  X-Position:
+                  <span>
+                    <input
+                      type="number"
+                      class="bg-slate-900 pl-1 rounded-sm"
+                      v-model="endpoint.xPosition"
+                      @change="changeAnimations(openKeypoint)"
+                      min="1"
+                      max="100"
+                  /></span>
+                </p>
+              </div>
+              <div class="bg-slate-800 rounded-md py-2 px-4">
+                <p>
+                  Y-Position:
+                  <span>
+                    <input
+                      type="number"
+                      class="bg-slate-900 pl-1 rounded-sm"
+                      v-model="endpoint.yPosition"
+                      @change="changeAnimations(openKeypoint)"
+                      min="1"
+                      max="100"
+                  /></span>
+                </p>
               </div>
             </div>
+            <button class="py-2 mt-4 bg-green-400 w-full rounded-md">
+              Add keypoint
+            </button>
           </div>
         </div>
       </div>
