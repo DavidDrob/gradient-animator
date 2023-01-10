@@ -14,7 +14,13 @@ const gradients = ref([
     yPosition: 80,
     strength: 0,
     hidden: false,
-    endpoints: [],
+    endpoints: [
+      {
+        xPosition: 21,
+        yPosition: 20,
+        time: 2,
+      },
+    ],
   },
   {
     id: 1,
@@ -35,7 +41,15 @@ const gradients = ref([
 const animationsEnabledGlobally = ref(false);
 
 watch(animationsEnabledGlobally, async (newValue, oldValue) => {
-  if (newValue) changeAnimations();
+  let ids = [];
+  if (newValue) {
+    gradients.value.forEach((gradient) => {
+      ids.push(gradient.id);
+    });
+    ids.forEach((id) => {
+      changeAnimations(id);
+    });
+  }
 });
 
 onMounted(() => {
@@ -94,50 +108,42 @@ function createCSS(id, x, y, color, strength, animationsEnabled) {
   }, ${color} ${strength}%, transparent),`;
 }
 
-function changeAnimations() {
+function changeAnimations(id) {
   const keyFrames = document.createElement("style");
   let newGradient;
 
-  gradients.value.forEach((gradient) => {
-    if (gradient.endpoints.length < 1 || !animationsEnabledGlobally.value)
-      return;
-    else {
-      // A CSS property can not be updated or re-registered in JS
-      // that means a new property with a new ID has to be created
-      // @dev creates a gradient with the same options and a new ID
-      if (
-        document.documentElement.style.getPropertyValue(
-          `--${gradient.id}-x-position`
-        )
-      ) {
-        removeGradient(gradient.id);
+  if (document.documentElement.style.getPropertyValue(`--${id}-x-position`)) {
+    // A CSS property can not be updated or re-registered in JS
+    // that means a new property with a new ID has to be created
+    // @dev creates a gradient with the same options and a new ID
+    const gradient = gradients.value.find((g) => g.id === id);
 
-        newGradient = {
-          id: gradient.id + 100,
-          color: gradient.color,
-          xPosition: gradient.xPosition,
-          yPosition: gradient.yPosition,
-          strength: gradient.strength,
-          hidden: gradient.hidden,
-          endpoints: gradient.endpoints,
-        };
-        gradients.value.push(newGradient);
+    newGradient = {
+      id: Math.max(...gradients.value.map((o) => o.id)) + 1,
+      color: gradient.color,
+      xPosition: gradient.xPosition,
+      yPosition: gradient.yPosition,
+      strength: gradient.strength,
+      hidden: gradient.hidden,
+      endpoints: gradient.endpoints,
+    };
 
-        window.CSS.registerProperty({
-          name: `--${newGradient.id}-x-position`,
-          syntax: "<percentage>",
-          inherits: false,
-          initialValue: newGradient.xPosition + "%",
-        });
+    removeGradient(id);
+    gradients.value.push(newGradient);
 
-        window.CSS.registerProperty({
-          name: `--${newGradient.id}-y-position`,
-          syntax: "<percentage>",
-          inherits: false,
-          initialValue: newGradient.yPosition + "%",
-        });
-      }
-    }
+    window.CSS.registerProperty({
+      name: `--${newGradient.id}-x-position`,
+      syntax: "<percentage>",
+      inherits: false,
+      initialValue: newGradient.xPosition + "%",
+    });
+
+    window.CSS.registerProperty({
+      name: `--${newGradient.id}-y-position`,
+      syntax: "<percentage>",
+      inherits: false,
+      initialValue: newGradient.yPosition + "%",
+    });
 
     document.documentElement.style.setProperty(
       `--${newGradient.id}-x-position`,
@@ -147,15 +153,19 @@ function changeAnimations() {
       `--${newGradient.id}-y-position`,
       newGradient.yPosition + "%"
     );
+
+    // TODO: make this a loop
     keyFrames.innerHTML = `
       @keyframes main {
           100% {
-            --${newGradient.id}-x-position: ${newGradient.endpoints[0].xPosition}%;
-            --${newGradient.id}-y-position: ${newGradient.endpoints[0].yPosition}%;
+            --${gradients.value[0].id}-x-position: ${gradients.value[0].endpoints[0].xPosition}%;
+            --${gradients.value[0].id}-y-position: ${gradients.value[0].endpoints[0].yPosition}%;
+            --${gradients.value[1].id}-x-position: ${gradients.value[1].endpoints[0].xPosition}%;
+            --${gradients.value[1].id}-y-position: ${gradients.value[1].endpoints[0].yPosition}%;
           }
-        }  
+        }
     `;
-  });
+  }
 
   document.head.appendChild(keyFrames);
 }
@@ -358,8 +368,10 @@ function onDrop(dropResult) {
             flex flex-col flex-nowrap
           "
         >
+          <p class="text-red-500">
+            Experimental feature - doesn't work in Safari, Firefox
+          </p>
           <div class="flex bg-slate-800">
-            <!-- <input type="radio" v-model="animationsEnabledGlobally" /> -->
             <input type="checkbox" v-model="animationsEnabledGlobally" />
             <div
               class="flex flex-col px-6"
@@ -371,6 +383,8 @@ function onDrop(dropResult) {
                   v-for="(endpoint, index) in gradient.endpoints"
                   :key="index"
                 >
+                  {{ gradient.id }}
+                  {{ endpoint }}
                   <input
                     type="number"
                     class="bg-slate-700"
