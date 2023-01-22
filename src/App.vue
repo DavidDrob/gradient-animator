@@ -90,6 +90,15 @@ function hideGradient(index) {
   gradients.value[gradient].hidden = !gradients.value[gradient].hidden;
 }
 
+function createKeypoint(id) {
+  const gradientId = gradients.value.find((g) => g.id === id);
+  gradientId.endpoints.push({
+    xPosition: 80,
+    yPosition: 20,
+    time: 5,
+  });
+}
+
 const cssString = () => {
   var baseString = "background: ";
   gradients.value.forEach((gradient) => {
@@ -449,8 +458,11 @@ function onDrop(dropResult) {
                 </p>
               </div>
             </div>
-            <button class="py-2 mt-4 bg-green-400 w-full rounded-md">
-              Add keypoint
+            <button
+              class="py-2 mt-4 bg-green-400 w-full rounded-md"
+              @click="createKeypoint(openKeypoint)"
+            >
+              Add Keypoint
             </button>
           </div>
         </div>
