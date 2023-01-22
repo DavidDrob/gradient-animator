@@ -14,7 +14,7 @@ const gradients = ref([
     yPosition: 80,
     strength: 0,
     hidden: false,
-    endpoints: [
+    keypoints: [
       {
         xPosition: 21,
         yPosition: 20,
@@ -34,7 +34,7 @@ const gradients = ref([
     yPosition: 80,
     strength: 0,
     hidden: false,
-    endpoints: [
+    keypoints: [
       {
         xPosition: 100,
         yPosition: 20,
@@ -72,7 +72,7 @@ function createGradient() {
     yPosition: 80,
     strength: 0,
     hidden: false,
-    endpoints: [],
+    keypoints: [],
   });
 }
 
@@ -92,7 +92,7 @@ function hideGradient(index) {
 
 function createKeypoint(id) {
   const gradientId = gradients.value.find((g) => g.id === id);
-  gradientId.endpoints.push({
+  gradientId.keypoints.push({
     xPosition: 80,
     yPosition: 20,
     time: 5,
@@ -109,7 +109,7 @@ const cssString = () => {
       gradient.yPosition,
       gradient.color,
       gradient.strength,
-      gradient.endpoints.length > 0 && animationsEnabledGlobally.value
+      gradient.keypoints.length > 0 && animationsEnabledGlobally.value
     );
   });
   return baseString + bgColor.value;
@@ -140,7 +140,7 @@ function changeAnimations(id) {
       yPosition: gradient.yPosition,
       strength: gradient.strength,
       hidden: gradient.hidden,
-      endpoints: gradient.endpoints,
+      keypoints: gradient.keypoints,
     };
 
     if (openKeypoint.value === id) openKeypoint.value = newGradient.id;
@@ -175,10 +175,10 @@ function changeAnimations(id) {
     keyFrames.innerHTML = `
       @keyframes main {
           100% {
-            --${gradients.value[0].id}-x-position: ${gradients.value[0].endpoints[0].xPosition}%;
-            --${gradients.value[0].id}-y-position: ${gradients.value[0].endpoints[0].yPosition}%;
-            --${gradients.value[1].id}-x-position: ${gradients.value[1].endpoints[0].xPosition}%;
-            --${gradients.value[1].id}-y-position: ${gradients.value[1].endpoints[0].yPosition}%;
+            --${gradients.value[0].id}-x-position: ${gradients.value[0].keypoints[0].xPosition}%;
+            --${gradients.value[0].id}-y-position: ${gradients.value[0].keypoints[0].yPosition}%;
+            --${gradients.value[1].id}-x-position: ${gradients.value[1].keypoints[0].xPosition}%;
+            --${gradients.value[1].id}-y-position: ${gradients.value[1].keypoints[0].yPosition}%;
           }
         }
     `;
@@ -189,7 +189,7 @@ function changeAnimations(id) {
 
 // creates CSS variables and properties for gradients with animations
 function initCSSVariables(id, x, y) {
-  if (gradients.value[id].endpoints.length > 0) {
+  if (gradients.value[id].keypoints.length > 0) {
     try {
       window.CSS.registerProperty({
         name: `--${id}-x-position`,
@@ -423,9 +423,9 @@ function onDrop(dropResult) {
           >
             <i @click="openKeypoint = false">close</i>
             <div
-              v-for="(endpoint, index) in gradients.find(
+              v-for="(keypoint, index) in gradients.find(
                 (g) => g.id === openKeypoint
-              ).endpoints"
+              ).keypoints"
               :key="index"
               class="mb-6"
             >
@@ -436,7 +436,7 @@ function onDrop(dropResult) {
                     <input
                       type="number"
                       class="bg-slate-900 pl-1 rounded-sm"
-                      v-model="endpoint.xPosition"
+                      v-model="keypoint.xPosition"
                       @change="changeAnimations(openKeypoint)"
                       min="1"
                       max="100"
@@ -450,7 +450,7 @@ function onDrop(dropResult) {
                     <input
                       type="number"
                       class="bg-slate-900 pl-1 rounded-sm"
-                      v-model="endpoint.yPosition"
+                      v-model="keypoint.yPosition"
                       @change="changeAnimations(openKeypoint)"
                       min="1"
                       max="100"
