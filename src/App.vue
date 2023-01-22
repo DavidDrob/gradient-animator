@@ -42,6 +42,21 @@ const gradients = ref([
       },
     ],
   },
+  {
+    id: 2,
+    color: "#987aF1",
+    xPosition: 80,
+    yPosition: 20,
+    strength: 0,
+    hidden: false,
+    keypoints: [
+      {
+        xPosition: 100,
+        yPosition: 20,
+        time: 2,
+      },
+    ],
+  },
 ]);
 const animationsEnabledGlobally = ref(false);
 const openKeypoint = ref(false);
@@ -72,7 +87,13 @@ function createGradient() {
     yPosition: 80,
     strength: 0,
     hidden: false,
-    keypoints: [],
+    keypoints: [
+      {
+        xPosition: 100,
+        yPosition: 20,
+        time: 2,
+      },
+    ],
   });
 }
 
@@ -123,68 +144,76 @@ function createCSS(id, x, y, color, strength, animationsEnabled) {
   }, ${color} ${strength}%, transparent),`;
 }
 
+// A CSS property can not be updated or re-registered in JS
+// that means a new property with a new ID has to be created
+// @dev creates a gradient with the same options and a new ID
 function changeAnimations(id) {
   const keyFrames = document.createElement("style");
   let newGradient;
 
-  if (document.documentElement.style.getPropertyValue(`--${id}-x-position`)) {
-    // A CSS property can not be updated or re-registered in JS
-    // that means a new property with a new ID has to be created
-    // @dev creates a gradient with the same options and a new ID
-    const gradient = gradients.value.find((g) => g.id === id);
+  const gradient = gradients.value.find((g) => g.id === id);
 
-    newGradient = {
-      id: Math.max(...gradients.value.map((o) => o.id)) + 1,
-      color: gradient.color,
-      xPosition: gradient.xPosition,
-      yPosition: gradient.yPosition,
-      strength: gradient.strength,
-      hidden: gradient.hidden,
-      keypoints: gradient.keypoints,
-    };
+  newGradient = {
+    id: Math.max(...gradients.value.map((o) => o.id)) + 1,
+    color: gradient.color,
+    xPosition: gradient.xPosition,
+    yPosition: gradient.yPosition,
+    strength: gradient.strength,
+    hidden: gradient.hidden,
+    keypoints: gradient.keypoints,
+  };
 
-    if (openKeypoint.value === id) openKeypoint.value = newGradient.id;
+  if (openKeypoint.value === id) openKeypoint.value = newGradient.id;
 
-    removeGradient(id);
-    gradients.value.push(newGradient);
+  removeGradient(id);
+  gradients.value.push(newGradient);
 
-    window.CSS.registerProperty({
-      name: `--${newGradient.id}-x-position`,
-      syntax: "<percentage>",
-      inherits: false,
-      initialValue: newGradient.xPosition + "%",
-    });
+  window.CSS.registerProperty({
+    name: `--${newGradient.id}-x-position`,
+    syntax: "<percentage>",
+    inherits: false,
+    initialValue: newGradient.xPosition + "%",
+  });
 
-    window.CSS.registerProperty({
-      name: `--${newGradient.id}-y-position`,
-      syntax: "<percentage>",
-      inherits: false,
-      initialValue: newGradient.yPosition + "%",
-    });
+  window.CSS.registerProperty({
+    name: `--${newGradient.id}-y-position`,
+    syntax: "<percentage>",
+    inherits: false,
+    initialValue: newGradient.yPosition + "%",
+  });
 
-    document.documentElement.style.setProperty(
-      `--${newGradient.id}-x-position`,
-      newGradient.xPosition + "%"
+  document.documentElement.style.setProperty(
+    `--${newGradient.id}-x-position`,
+    newGradient.xPosition + "%"
+  );
+  document.documentElement.style.setProperty(
+    `--${newGradient.id}-y-position`,
+    newGradient.yPosition + "%"
+  );
+
+  let statements = "";
+  gradients.value.forEach((gradient) => {
+    statements += createStatements(
+      gradient.id,
+      gradient.keypoints[0].xPosition,
+      gradient.keypoints[0].yPosition
     );
-    document.documentElement.style.setProperty(
-      `--${newGradient.id}-y-position`,
-      newGradient.yPosition + "%"
-    );
+  });
 
-    // TODO: make this a loop
-    keyFrames.innerHTML = `
-      @keyframes main {
-          100% {
-            --${gradients.value[0].id}-x-position: ${gradients.value[0].keypoints[0].xPosition}%;
-            --${gradients.value[0].id}-y-position: ${gradients.value[0].keypoints[0].yPosition}%;
-            --${gradients.value[1].id}-x-position: ${gradients.value[1].keypoints[0].xPosition}%;
-            --${gradients.value[1].id}-y-position: ${gradients.value[1].keypoints[0].yPosition}%;
-          }
-        }
+  keyFrames.innerHTML = `
+    @keyframes main {
+      100% {
+        ${statements}
+      }
+    }
     `;
-  }
 
   document.head.appendChild(keyFrames);
+}
+
+// TODO: rename this
+function createStatements(id, x, y) {
+  return `--${id}-x-position: ${x}%;--${id}-y-position: ${y}%;`;
 }
 
 // creates CSS variables and properties for gradients with animations
