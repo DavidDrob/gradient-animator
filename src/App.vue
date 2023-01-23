@@ -152,6 +152,7 @@ function changeAnimations(id) {
   let newGradient;
 
   const gradient = gradients.value.find((g) => g.id === id);
+  const oldPosition = gradients.value.indexOf(gradient);
 
   newGradient = {
     id: Math.max(...gradients.value.map((o) => o.id)) + 1,
@@ -167,6 +168,12 @@ function changeAnimations(id) {
 
   removeGradient(id);
   gradients.value.push(newGradient);
+
+  gradients.value = applyDrag(gradients.value, {
+    addedIndex: oldPosition,
+    removedIndex: gradients.value.length - 1,
+    payload: undefined,
+  });
 
   window.CSS.registerProperty({
     name: `--${newGradient.id}-x-position`,
@@ -211,7 +218,6 @@ function changeAnimations(id) {
   document.head.appendChild(keyFrames);
 }
 
-// TODO: rename this
 function createStatements(id, x, y) {
   return `--${id}-x-position: ${x}%;--${id}-y-position: ${y}%;`;
 }
