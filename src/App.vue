@@ -16,14 +16,19 @@ const gradients = ref([
     hidden: false,
     keypoints: [
       {
-        xPosition: 21,
+        xPosition: 20,
         yPosition: 20,
-        time: 2,
+        time: 40,
       },
       {
-        xPosition: 21,
-        yPosition: 20,
-        time: 2,
+        xPosition: 100,
+        yPosition: 80,
+        time: 80,
+      },
+      {
+        xPosition: 0,
+        yPosition: 100,
+        time: 100,
       },
     ],
   },
@@ -38,7 +43,7 @@ const gradients = ref([
       {
         xPosition: 100,
         yPosition: 20,
-        time: 2,
+        time: 100,
       },
     ],
   },
@@ -53,7 +58,7 @@ const gradients = ref([
       {
         xPosition: 100,
         yPosition: 20,
-        time: 2,
+        time: 48,
       },
     ],
   },
@@ -198,28 +203,39 @@ function changeAnimations(id) {
     newGradient.yPosition + "%"
   );
 
-  let statements = "";
+  const createStatements = (id, x, y) =>
+    `--${id}-x-position: ${x}%;--${id}-y-position: ${y}%;`;
+
+  let globalStatements = [];
   gradients.value.forEach((gradient) => {
-    statements += createStatements(
-      gradient.id,
-      gradient.keypoints[0].xPosition,
-      gradient.keypoints[0].yPosition
-    );
+    gradient.keypoints.forEach((keypoint) => {
+      const statement = createStatements(
+        gradient.id,
+        keypoint.xPosition,
+        keypoint.yPosition
+      );
+      if (globalStatements[keypoint.time])
+        globalStatements[keypoint.time] += statement;
+      else globalStatements[keypoint.time] = statement;
+    });
   });
+
+  let animation = "";
+
+  const animationString = (keypoint, statement) =>
+    `${keypoint}% {${statement}}`;
+
+  for (const i in globalStatements) {
+    animation += animationString(i, globalStatements[i]);
+  }
 
   keyFrames.innerHTML = `
     @keyframes main {
-      100% {
-        ${statements}
-      }
+      ${animation}
     }
     `;
 
   document.head.appendChild(keyFrames);
-}
-
-function createStatements(id, x, y) {
-  return `--${id}-x-position: ${x}%;--${id}-y-position: ${y}%;`;
 }
 
 // creates CSS variables and properties for gradients with animations
