@@ -96,7 +96,7 @@ function createGradient() {
       {
         xPosition: 100,
         yPosition: 20,
-        time: 2,
+        time: 90,
       },
     ],
   });
@@ -117,11 +117,14 @@ function hideGradient(index) {
 }
 
 function createKeypoint(id) {
-  const gradientId = gradients.value.find((g) => g.id === id);
-  gradientId.keypoints.push({
+  const gradient = gradients.value.find((g) => g.id === id);
+  gradient.keypoints.push({
     xPosition: 80,
     yPosition: 20,
-    time: 5,
+    time: 90,
+  });
+  gradient.keypoints.sort((a, b) => {
+    return a.time - b.time;
   });
 }
 
@@ -236,6 +239,15 @@ function changeAnimations(id) {
     `;
 
   document.head.appendChild(keyFrames);
+}
+
+// sort keypoints with a 75ms delay after the user changes time of a keypoint
+function changeTime(id) {
+  const gradient = gradients.value.find((g) => g.id === id);
+  setTimeout(() => {
+    gradient.keypoints.sort((a, b) => a.time - b.time);
+  }, 750);
+  changeAnimations(id);
 }
 
 // creates CSS variables and properties for gradients with animations
@@ -480,33 +492,45 @@ function onDrop(dropResult) {
               :key="index"
               class="mb-6"
             >
-              <div class="bg-slate-800 rounded-md py-2 px-4 mb-3">
-                <p>
-                  X-Position:
-                  <span>
-                    <input
-                      type="number"
-                      class="bg-slate-900 pl-1 rounded-sm"
-                      v-model="keypoint.xPosition"
-                      @change="changeAnimations(openKeypoint)"
-                      min="1"
-                      max="100"
-                  /></span>
-                </p>
-              </div>
-              <div class="bg-slate-800 rounded-md py-2 px-4">
-                <p>
-                  Y-Position:
-                  <span>
-                    <input
-                      type="number"
-                      class="bg-slate-900 pl-1 rounded-sm"
-                      v-model="keypoint.yPosition"
-                      @change="changeAnimations(openKeypoint)"
-                      min="1"
-                      max="100"
-                  /></span>
-                </p>
+              <div class="flex items-center">
+                <input
+                  type="number"
+                  class="bg-slate-900 pl-1 rounded-sm"
+                  v-model="keypoint.time"
+                  @change="changeTime(openKeypoint)"
+                  min="1"
+                  max="100"
+                />
+                <div>
+                  <div class="bg-slate-800 rounded-md py-2 px-4 mb-3">
+                    <p>
+                      X-Position:
+                      <span>
+                        <input
+                          type="number"
+                          class="bg-slate-900 pl-1 rounded-sm"
+                          v-model="keypoint.xPosition"
+                          @change="changeAnimations(openKeypoint)"
+                          min="1"
+                          max="100"
+                      /></span>
+                    </p>
+                  </div>
+                  <div class="bg-slate-800 rounded-md py-2 px-4">
+                    <p>
+                      Y-Position:
+                      <span>
+                        <input
+                          type="number"
+                          class="bg-slate-900 pl-1 rounded-sm"
+                          v-model="keypoint.yPosition"
+                          @change="changeAnimations(openKeypoint)"
+                          min="1"
+                          max="100"
+                      /></span>
+                    </p>
+                  </div>
+                </div>
               </div>
             </div>
             <button
