@@ -484,7 +484,13 @@ function onDrop(dropResult) {
             v-if="openKeypoint || openKeypoint === 0"
             class="pb-4 bg-slate-600 px-6 pt-3 rounded-md"
           >
-            <i @click="openKeypoint = false">close</i>
+            <div class="flex w-full justify-center mb-3">
+              <div
+                class="w-6 h-6 rounded-sm mr-3"
+                :style="'background-color:' + gradients[openKeypoint].color"
+              ></div>
+              <i @click="openKeypoint = false">close</i>
+            </div>
             <div
               v-for="(keypoint, index) in gradients.find(
                 (g) => g.id === openKeypoint
