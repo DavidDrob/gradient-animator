@@ -84,9 +84,13 @@ onMounted(() => {
   });
 });
 
+const maxIdGlobal = ref(1);
+
 function createGradient() {
+  const maxId = Math.max(...gradients.value.map((o) => o.id));
+
   gradients.value.push({
-    id: Math.max(...gradients.value.map((o) => o.id)) + 2,
+    id: Number.isInteger(maxId) ? maxId + 2 : maxIdGlobal.value,
     color: "#23d726",
     xPosition: 80,
     yPosition: 80,
@@ -100,12 +104,14 @@ function createGradient() {
       },
     ],
   });
+  animationsEnabledGlobally.value = false;
 }
 
 function removeGradient(index) {
   const gradient = gradients.value.findIndex(
     (gradient) => gradient.id == index
   );
+  if (gradients.value.length) maxIdGlobal.value = index + 1; // to avoid same ID error
   gradients.value.splice(gradient, 1);
 }
 
@@ -485,10 +491,11 @@ function onDrop(dropResult) {
             class="pb-4 bg-slate-600 px-6 pt-3 rounded-md"
           >
             <div class="flex w-full justify-center mb-3">
-              <div
+              <!-- TODO: fix getting correct gradient -->
+              <!-- <div
                 class="w-6 h-6 rounded-sm mr-3"
                 :style="'background-color:' + gradients[openKeypoint].color"
-              ></div>
+              ></div> -->
               <i @click="openKeypoint = false">close</i>
             </div>
             <div
