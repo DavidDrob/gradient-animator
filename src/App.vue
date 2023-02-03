@@ -63,6 +63,10 @@ const gradients = ref([
     ],
   },
 ]);
+
+const animationCSSString = ref("");
+const properties = ref([]);
+
 const animationsEnabledGlobally = ref(false);
 const openKeypoint = ref(false);
 
@@ -75,7 +79,7 @@ watch(animationsEnabledGlobally, async (newValue, oldValue) => {
     ids.forEach((id) => {
       changeAnimations(id);
     });
-  }
+  } else animationCSSString.value = "";
 });
 
 onMounted(() => {
@@ -203,6 +207,17 @@ function changeAnimations(id) {
     initialValue: newGradient.yPosition + "%",
   });
 
+  properties.value.push(`@property --${newGradient.id}-x-position {
+      syntax: '<percentage>';
+      inherits: false;
+      initial-value: ${newGradient.xPosition}%;
+    }`);
+  properties.value.push(`@property --${newGradient.id}-y-position {
+      syntax: '<percentage>';
+      inherits: false;
+      initial-value: ${newGradient.yPosition}%;
+    }`);
+
   document.documentElement.style.setProperty(
     `--${newGradient.id}-x-position`,
     newGradient.xPosition + "%"
@@ -243,6 +258,8 @@ function changeAnimations(id) {
       ${animation}
     }
     `;
+
+  animationCSSString.value = keyFrames.innerHTML;
 
   document.head.appendChild(keyFrames);
 }
@@ -558,8 +575,17 @@ function onDrop(dropResult) {
     </div>
   </div>
   <div class="-mt-12 w-full text-white font-semibold bg-slate-600 px-4">
-    <span>Copy the CSS</span> <br />
-    <span>{{ cssString() }}</span>
+    <div>
+      <span>Copy the CSS</span> <br />
+      <span>{{ cssString() }};</span>
+    </div>
+    <div v-if="animationCSSString">
+      <span>Copy the CSS</span> <br />
+      <span v-for="property in properties" :key="property">{{ property }}</span>
+      <br />
+      <span>{{ animationCSSString }}</span> <br />
+      <span>Add `animation-name: main;` to an element you want to animate</span>
+    </div>
   </div>
 </template>
 
