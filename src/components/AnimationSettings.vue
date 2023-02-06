@@ -52,6 +52,10 @@ function createKeypoint(id) {
     return a.time - b.time;
   });
 }
+
+const openGradient = computed(() => {
+  return props.gradients.find((g) => g.id == props.gradientSelected);
+});
 </script>
 
 <template>
@@ -109,17 +113,14 @@ function createKeypoint(id) {
         class="pb-4 bg-slate-600 px-6 pt-3 rounded-md"
       >
         <div class="flex w-full justify-center mb-3">
-          <!-- TODO: fix getting correct gradient -->
-          <!-- <div
-                class="w-6 h-6 rounded-sm mr-3"
-                :style="'background-color:' + gradients[openKeypoint].color"
-              ></div> -->
+          <div
+            class="w-6 h-6 rounded-sm mr-3"
+            :style="'background-color:' + openGradient.color"
+          ></div>
           <i @click="gradientSelected = false">close</i>
         </div>
         <div
-          v-for="(keypoint, index) in gradients.find(
-            (g) => g.id == gradientSelected
-          )?.keypoints"
+          v-for="(keypoint, index) in openGradient.keypoints"
           :key="index"
           class="mb-6"
         >
