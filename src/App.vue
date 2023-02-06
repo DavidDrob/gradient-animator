@@ -283,10 +283,10 @@ function changeGradient(payload) {
       <GradientSettings
         :gradients="gradients"
         @change-gradient="changeGradient"
-        :maxIdGlobal="maxIdGlobal"
+        :max-id-global="maxIdGlobal"
         @update-max-id="(newId) => (maxIdGlobal = newId)"
         @disable-animation="animationsEnabledGlobally = false"
-        v-model:bgColor="bgColor"
+        v-model:bg-color="bgColor"
       />
 
       <AnimationSettings

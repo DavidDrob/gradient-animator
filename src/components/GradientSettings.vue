@@ -9,7 +9,7 @@ const props = defineProps({
 });
 
 const emit = defineEmits([
-  "update:bgColor",
+  "update:bg-color",
   "change-gradient",
   "update-max-id",
   "disable-animation",
@@ -152,7 +152,7 @@ function onDrop(dropResult) {
                 class="mr-4"
                 type="color"
                 :value="bgColor"
-                @input="$emit('update:bgColor', $event.target.value)"
+                @input="$emit('update:bg-color', $event.target.value)"
               />
               <h1>{{ bgColor }}</h1>
             </div>
