@@ -146,6 +146,8 @@ function changeAnimations(id) {
   removeGradient(id);
   gradients.value.push(newGradient);
 
+  properties.value = [];
+
   // gradients.value = applyDrag(gradients.value, {
   //   addedIndex: oldPosition,
   //   removedIndex: gradients.value.length - 1,
