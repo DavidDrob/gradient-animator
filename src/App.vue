@@ -247,8 +247,12 @@ function initCSSVariables(id, x, y) {
   }
 }
 
+const animationStarted = ref(false);
+
 function updateGradient(payload) {
-  // const animationStarted = animationsEnabledGlobally.value;
+  if (payload.event === "drag:start" && animationsEnabledGlobally.value) {
+    animationStarted.value = true;
+  }
   animationsEnabledGlobally.value = false;
   const id = gradients.value.findIndex(
     (gradient) => gradient.id === payload.id
@@ -260,10 +264,10 @@ function updateGradient(payload) {
   const y = payload.newPositions.y;
   if (y >= -10 && y <= 110) gradients.value[id].yPosition = y;
 
-  // TODO: run at drop of handler
-  // setTimeout(() => {
-  //   if (animationStarted) animationsEnabledGlobally.value = true;
-  // }, 1000);
+  setTimeout(() => {
+    if (animationStarted.value && payload.event === "drag:end")
+      animationsEnabledGlobally.value = true;
+  }, 500);
 }
 
 function changeGradient(payload) {

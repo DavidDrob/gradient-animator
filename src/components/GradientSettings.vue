@@ -1,5 +1,5 @@
 <script setup>
-import { ref, defineEmits, defineProps } from "vue";
+import { defineEmits, defineProps } from "vue";
 import { Container, Draggable } from "vue-dndrop";
 
 const props = defineProps({

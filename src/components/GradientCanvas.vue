@@ -21,7 +21,11 @@ function positionHandler(e) {
   const newX = (e.left / canvasSettings.width) * 100;
   const newY = (e.top / canvasSettings.height) * 100;
 
-  emit("move-point", { id: element, newPositions: { x: newX, y: newY } });
+  emit("move-point", {
+    id: element,
+    newPositions: { x: newX, y: newY },
+    event: e.eventName,
+  });
 }
 </script>
 
@@ -38,7 +42,9 @@ function positionHandler(e) {
           style="width: 1px; height: 1px"
           :left="(gradient.xPosition / 100) * canvasSettings.width"
           :top="(gradient.yPosition / 100) * canvasSettings.height"
+          @drag:start="positionHandler"
           @drag:move="positionHandler"
+          @drag:end="positionHandler"
         >
           <div class="drag-container" :id="gradient.id">
             <img
