@@ -168,31 +168,35 @@ function changeAnimations(id) {
     initialValue: newGradient.yPosition + "%",
   });
 
-  properties.value.push(`@property --${newGradient.id}-x-position {
+  if (!newGradient.hidden) {
+    properties.value.push(`@property --${newGradient.id}-x-position {
       syntax: '<percentage>';
-      inherits: false;
-      initial-value: ${newGradient.xPosition}%;
-    }`);
-  properties.value.push(`@property --${newGradient.id}-y-position {
-      syntax: '<percentage>';
-      inherits: false;
-      initial-value: ${newGradient.yPosition}%;
-    }`);
+        inherits: false;
+        initial-value: ${newGradient.xPosition}%;
+      }`);
+    properties.value.push(`@property --${newGradient.id}-y-position {
+        syntax: '<percentage>';
+          inherits: false;
+          initial-value: ${newGradient.yPosition}%;
+        }`);
 
-  document.documentElement.style.setProperty(
-    `--${newGradient.id}-x-position`,
-    newGradient.xPosition + "%"
-  );
-  document.documentElement.style.setProperty(
-    `--${newGradient.id}-y-position`,
-    newGradient.yPosition + "%"
-  );
+    document.documentElement.style.setProperty(
+      `--${newGradient.id}-x-position`,
+      newGradient.xPosition + "%"
+    );
+    document.documentElement.style.setProperty(
+      `--${newGradient.id}-y-position`,
+      newGradient.yPosition + "%"
+    );
+  }
 
   const createStatements = (id, x, y) =>
     `--${id}-x-position: ${x}%;--${id}-y-position: ${y}%;`;
 
   let globalStatements = [];
   gradients.value.forEach((gradient) => {
+    if (gradient.hidden) return;
+
     gradient.keypoints.forEach((keypoint) => {
       const statement = createStatements(
         gradient.id,

@@ -1,8 +1,8 @@
 <script setup>
-import { reactive, defineEmits, defineProps } from "vue";
+import { computed, reactive, defineEmits, defineProps } from "vue";
 import VueResizable from "vue-resizable";
 
-defineProps({
+const props = defineProps({
   gradients: Array,
   cssString: String,
 });
@@ -26,6 +26,10 @@ function positionHandler(e) {
     event: e.eventName,
   });
 }
+
+const unhiddenGradients = computed(() => {
+  return props.gradients.filter((gradient) => !gradient.hidden);
+});
 </script>
 
 <template>
@@ -40,7 +44,7 @@ function positionHandler(e) {
       "
     >
       <vue-resizable
-        v-for="gradient in gradients"
+        v-for="gradient in unhiddenGradients"
         :key="gradient.id"
         dragSelector=".drag-container"
         :active="[]"

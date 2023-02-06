@@ -33,6 +33,7 @@ function hideGradient(index) {
 
   props.gradients[gradient].hidden = !props.gradients[gradient].hidden;
   emit("change-gradient", props.gradients);
+  emit("disable-animation");
 }
 
 function createGradient() {
