@@ -14,7 +14,6 @@ const canvasSettings = reactive({
   height: 384,
 });
 
-// TODO: set constraint for moving handler outside the border
 function positionHandler(e) {
   const element = parseInt(e.cmp.dragElements[0].id);
 
@@ -30,35 +29,39 @@ function positionHandler(e) {
 </script>
 
 <template>
-  <div class="p-8 border-2 border-dashed border-gray-500/50">
-    <div class="w-96 h-96 border border-gray-500 relative">
-      <div class="w-96 h-96" id="gradient" :style="cssString">
-        <vue-resizable
-          v-for="gradient in gradients"
-          :key="gradient.id"
-          dragSelector=".drag-container"
-          :active="[]"
-          :fit-parent="false"
-          style="width: 1px; height: 1px"
-          :left="(gradient.xPosition / 100) * canvasSettings.width"
-          :top="(gradient.yPosition / 100) * canvasSettings.height"
-          @drag:start="positionHandler"
-          @drag:move="positionHandler"
-          @drag:end="positionHandler"
-        >
-          <div class="drag-container" :id="gradient.id">
-            <img
-              src="../assets/circle.svg"
-              style="
-                user-drag: none;
-                user-select: none;
-                transform: scale(10, 10);
-              "
-              alt="point"
-            />
-          </div>
-        </vue-resizable>
-      </div>
+  <div id="gradient" :style="cssString">
+    <div
+      class="
+        w-[25.5rem]
+        h-[25.5rem]
+        -m-6
+        bg-transparent
+        border-2 border-dashed border-gray-500/50
+      "
+    >
+      <vue-resizable
+        v-for="gradient in gradients"
+        :key="gradient.id"
+        dragSelector=".drag-container"
+        :active="[]"
+        :width="1"
+        :height="1"
+        :fit-parent="true"
+        style="width: 1px; height: 1px"
+        :left="(gradient.xPosition / 100) * canvasSettings.width"
+        :top="(gradient.yPosition / 100) * canvasSettings.height"
+        @drag:start="positionHandler"
+        @drag:move="positionHandler"
+        @drag:end="positionHandler"
+      >
+        <div class="drag-container" :id="gradient.id">
+          <img
+            src="../assets/circle.svg"
+            style="user-drag: none; user-select: none; transform: scale(10, 10)"
+            alt="point"
+          />
+        </div>
+      </vue-resizable>
     </div>
   </div>
 </template>
