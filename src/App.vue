@@ -127,6 +127,8 @@ function createCSS(id, x, y, color, strength, animationsEnabled) {
   }, ${color} ${strength}%, transparent),`;
 }
 
+const highestId = ref(4);
+
 // A CSS property can not be updated or re-registered in JS
 // that means a new property with a new ID has to be created
 // @dev creates a gradient with the same options and a new ID
@@ -135,10 +137,9 @@ function changeAnimations(id) {
   let newGradient;
 
   const gradient = gradients.value.find((g) => g.id === id);
-  const oldPosition = gradients.value.indexOf(gradient);
 
   newGradient = {
-    id: Math.max(...gradients.value.map((o) => o.id)) + 1,
+    id: highestId.value,
     color: gradient.color,
     xPosition: gradient.xPosition,
     yPosition: gradient.yPosition,
@@ -147,18 +148,14 @@ function changeAnimations(id) {
     keypoints: gradient.keypoints,
   };
 
+  highestId.value += 1;
+
   if (openKeypoint.value === id) openKeypoint.value = newGradient.id;
 
   removeGradient(id);
   gradients.value.push(newGradient);
 
   properties.value = [];
-
-  // gradients.value = applyDrag(gradients.value, {
-  //   addedIndex: oldPosition,
-  //   removedIndex: gradients.value.length - 1,
-  //   payload: undefined,
-  // });
 
   window.CSS.registerProperty({
     name: `--${newGradient.id}-x-position`,
