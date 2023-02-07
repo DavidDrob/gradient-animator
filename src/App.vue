@@ -72,6 +72,12 @@ const openKeypoint = ref(false);
 const maxIdGlobal = ref(1);
 
 watch(animationsEnabledGlobally, async (newValue, oldValue) => {
+  // restart animation on toggle
+  const el = document.getElementById("gradient");
+  el.style.animation = "none";
+  el.offsetHeight;
+  el.style.animation = null;
+
   let ids = [];
   if (newValue) {
     gradients.value.forEach((gradient) => {
