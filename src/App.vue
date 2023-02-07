@@ -277,8 +277,10 @@ function updateGradient(payload) {
   if (y >= -10 && y <= 110) gradients.value[id].yPosition = y;
 
   setTimeout(() => {
-    if (animationStarted.value && payload.event === "drag:end")
+    if (animationStarted.value && payload.event === "drag:end") {
       animationsEnabledGlobally.value = true;
+      animationStarted.value = false;
+    }
   }, 500);
 }
 
