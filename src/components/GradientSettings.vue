@@ -1,6 +1,9 @@
 <script setup>
-import { defineEmits, defineProps } from "vue";
+import { computed, defineEmits, defineProps } from "vue";
 import { Container, Draggable } from "vue-dndrop";
+import trash from "../assets/trash.svg";
+import eye from "../assets/eye.svg";
+import eyeSlash from "../assets/eye-slash.svg";
 
 const props = defineProps({
   gradients: Array,
@@ -83,91 +86,116 @@ function onDrop(dropResult) {
 </script>
 
 <template>
-  <div class="bg-slate-900">
-    <div
-      class="
-        w-full
-        px-16
-        py-4
-        h-[36rem]
-        rounded-md
-        bg-gray-700
-        text-white
-        overflow-auto
-        flex flex-col flex-nowrap
-      "
+  <div
+    class="
+      px-8
+      py-4
+      h-[36rem]
+      rounded-md
+      bg-gray-700
+      text-white
+      overflow-auto
+      flex flex-col flex-nowrap
+    "
+  >
+    <p class="text-xl font-bold mb-4">Gradient Settings</p>
+    <Container
+      @drop="onDrop"
+      drag-class="opacity-ghost"
+      drop-class="opacity-ghost-drop"
+      drag-handle-selector=".column-drag-handle"
     >
-      <Container
-        @drop="onDrop"
-        drag-class="opacity-ghost"
-        drop-class="opacity-ghost-drop"
-        drag-handle-selector=".column-drag-handle"
-      >
-        <Draggable v-for="(gradient, index) in gradients" :key="index">
-          <div class="flex items-center py-4 first:pt-0">
-            <span
-              class="
-                column-drag-handle
-                cursor-pointer
-                bg-slate-900
-                p-6
-                rounded-l-md
-              "
-              >&#x2630;</span
-            >
-            <div class="flex bg-slate-800 rounded-r-md pr-4">
+      <Draggable v-for="(gradient, index) in gradients" :key="index">
+        <div class="flex items-center py-4 first:pt-0">
+          <span
+            class="
+              column-drag-handle
+              cursor-pointer
+              bg-slate-900
+              p-6
+              rounded-l-md
+            "
+            >&#x2630;</span
+          >
+          <div class="flex bg-slate-800 rounded-r-md pr-4">
+            <div class="flex">
               <div class="flex">
-                <div class="flex flex-col px-6">
-                  <span
-                    class="bg-green-400 px-2 my-2 rounded-md"
-                    @click="removeGradient(gradient.id)"
-                    >remove</span
-                  >
-                  <span
-                    class="bg-green-400 px-2 mb-2 rounded-md"
-                    @click="hideGradient(gradient.id)"
-                    >{{ gradient.hidden ? "unhide" : "hide" }}</span
-                  >
-                </div>
-                <div class="grid place-items-center">
-                  <input type="color" v-model="gradient.color" />
-                  <h1>{{ gradient.color }}</h1>
-                </div>
-              </div>
-              <div class="flex flex-col justify-center">
-                <input
-                  type="range"
-                  :min="-100"
-                  :max="75"
-                  v-model="gradient.strength"
+                <img
+                  class="w-6 mx-4 cursor-pointer"
+                  @click="removeGradient(gradient.id)"
+                  :src="trash"
+                  alt="remove"
+                />
+                <img
+                  class="w-6 cursor-pointer"
+                  @click="hideGradient(gradient.id)"
+                  :src="gradient.hidden ? eye : eyeSlash"
+                  alt="hide"
                 />
               </div>
+              <div class="grid place-items-center py-1 mx-8">
+                <input
+                  class="w-8 h-8 mb-2 bg-transparent"
+                  id="color"
+                  type="color"
+                  v-model="gradient.color"
+                />
+                <h1 class="font-thin">{{ gradient.color }}</h1>
+              </div>
             </div>
-          </div>
-        </Draggable>
-        <div class="flex flex-col items-center py-2">
-          <div class="flex flex-col bg-slate-800 w-full rounded-md py-2">
-            <p>Background Color</p>
-            <div class="w-full flex justify-center">
+            <div class="flex flex-col justify-center">
               <input
-                class="mr-4"
-                type="color"
-                :value="bgColor"
-                @input="$emit('update:bg-color', $event.target.value)"
+                type="range"
+                :min="-100"
+                :max="75"
+                v-model="gradient.strength"
               />
-              <h1>{{ bgColor }}</h1>
             </div>
-          </div>
-          <div class="w-full mt-4 flex justify-center">
-            <button
-              class="py-2 bg-green-400 w-1/2 rounded-md"
-              @click="createGradient"
-            >
-              Add
-            </button>
           </div>
         </div>
-      </Container>
-    </div>
+      </Draggable>
+      <div class="flex flex-col items-center py-2">
+        <div class="flex flex-col bg-slate-800 w-full rounded-md py-2">
+          <p class="font-semibold mb-2">Background Color</p>
+          <div class="w-full flex justify-center items-center">
+            <input
+              class="mr-4 w-8 h-8 bg-transparent"
+              id="color"
+              type="color"
+              :value="bgColor"
+              @input="$emit('update:bg-color', $event.target.value)"
+            />
+            <h1>{{ bgColor }}</h1>
+          </div>
+        </div>
+        <div class="w-full mt-4 flex justify-center">
+          <button
+            class="py-2 bg-cyan-400 w-1/2 rounded-md"
+            @click="createGradient"
+          >
+            Add
+          </button>
+        </div>
+      </div>
+    </Container>
   </div>
 </template>
+
+<style scoped>
+#color {
+  -webkit-appearance: none;
+  padding: 0;
+  border: none;
+  border-radius: 0.375rem;
+}
+#color::-webkit-color-swatch {
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0;
+}
+#color::-webkit-color-swatch-wrapper {
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0;
+}
+</style>

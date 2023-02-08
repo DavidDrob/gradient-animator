@@ -4,36 +4,11 @@ import GradientCanvas from "./components/GradientCanvas.vue";
 import GradientSettings from "./components/GradientSettings.vue";
 import AnimationSettings from "./components/AnimationSettings.vue";
 
-const bgColor = ref("#112521");
+const bgColor = ref("#2f1d49");
 
 const gradients = ref([
   {
     id: 0,
-    color: "#26d723",
-    xPosition: 80,
-    yPosition: 80,
-    strength: 0,
-    hidden: false,
-    keypoints: [
-      {
-        xPosition: 20,
-        yPosition: 20,
-        time: 40,
-      },
-      {
-        xPosition: 100,
-        yPosition: 80,
-        time: 80,
-      },
-      {
-        xPosition: 0,
-        yPosition: 100,
-        time: 100,
-      },
-    ],
-  },
-  {
-    id: 1,
     color: "#3cc2dd",
     xPosition: 20,
     yPosition: 80,
@@ -48,7 +23,7 @@ const gradients = ref([
     ],
   },
   {
-    id: 2,
+    id: 1,
     color: "#987aF1",
     xPosition: 80,
     yPosition: 20,
@@ -127,7 +102,7 @@ function createCSS(id, x, y, color, strength, animationsEnabled) {
   }, ${color} ${strength}%, transparent),`;
 }
 
-const highestId = ref(4);
+const highestId = ref(3);
 
 // A CSS property can not be updated or re-registered in JS
 // that means a new property with a new ID has to be created
@@ -287,32 +262,94 @@ function changeGradient(payload) {
 </script>
 
 <template>
-  <div class="bg-slate-900 h-screen flex items-start">
-    <div class="w-full flex justify-between items-center mx-32 mt-20">
+  <header
+    class="bg-white w-5/6 m-auto flex justify-between font-bold"
+    style="height: 10vh"
+  >
+    <div class="flex items-center">
+      <img src="https://via.placeholder.com/66x66" alt="Gradient Tool" />
+      <p class="ml-4">Gradient Tool</p>
+    </div>
+    <div class="flex items-center">
+      <p class="text-gray-600 mr-4 cursor-pointer">Explore</p>
+      <button
+        class="bg-cyan-400 hover:bg-cyan-500 text-white px-2 py-3 rounded-md"
+      >
+        <p class="font-bold">Create Gradients</p>
+      </button>
+    </div>
+  </header>
+  <main
+    class="grid place-items-center"
+    id="gradient"
+    :style="cssString()"
+    style="height: 40vh"
+  >
+    <div class="font-bold text-white">
+      <h1 class="text-5xl">Gradients play a big part in modern web design.</h1>
+      <h2 class="text-4xl mt-4">
+        Create and animate them using
+        <span class="text-cyan-400">Gradient Tool</span>
+      </h2>
+      <div>
+        <button
+          class="
+            font-bold
+            px-5
+            py-2
+            rounded-md
+            mr-10
+            mt-10
+            hover:shadow-md
+            bg-cyan-400
+          "
+        >
+          <p>Start Creating</p>
+        </button>
+        <button
+          class="
+            font-bold
+            border-2 border-cyan-400
+            px-5
+            py-2
+            rounded-md
+            hover:shadow-md
+          "
+        >
+          <p>Explore</p>
+        </button>
+      </div>
+    </div>
+  </main>
+  <div class="bg-white flex items-start">
+    <div class="w-full flex flex-wrap justify-around items-center mx-32 mt-20">
       <GradientCanvas
         :gradients="gradients"
         :css-string="cssString()"
         @move-point="updateGradient"
       />
 
-      <GradientSettings
-        :gradients="gradients"
-        @change-gradient="changeGradient"
-        :max-id-global="maxIdGlobal"
-        @update-max-id="(newId) => (maxIdGlobal = newId)"
-        @disable-animation="animationsEnabledGlobally = false"
-        v-model:bg-color="bgColor"
-      />
+      <div class="flex mt-12">
+        <GradientSettings
+          class="mr-12"
+          :gradients="gradients"
+          @change-gradient="changeGradient"
+          :max-id-global="maxIdGlobal"
+          @update-max-id="(newId) => (maxIdGlobal = newId)"
+          @disable-animation="animationsEnabledGlobally = false"
+          v-model:bg-color="bgColor"
+        />
 
-      <AnimationSettings
-        :gradients="gradients"
-        v-model:gradientSelected="openKeypoint"
-        v-model:animationsEnabled="animationsEnabledGlobally"
-        @update-animation="changeAnimations"
-      />
+        <AnimationSettings
+          :gradients="gradients"
+          v-model:gradientSelected="openKeypoint"
+          v-model:animationsEnabled="animationsEnabledGlobally"
+          @update-animation="changeAnimations"
+        />
+      </div>
     </div>
   </div>
-  <div class="-mt-12 w-full text-white font-semibold bg-slate-600 px-4">
+  <div class="w-full mt-32 text-white font-semibold bg-slate-600 px-4">
     <div>
       <span>Copy the CSS</span> <br />
       <span>{{ cssString() }};</span>
@@ -340,5 +377,14 @@ function changeGradient(payload) {
   animation-name: main;
   animation-iteration-count: infinite;
   animation-duration: 2s;
+}
+
+.noselect {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 </style>

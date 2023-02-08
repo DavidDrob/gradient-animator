@@ -1,5 +1,7 @@
 <script setup>
 import { computed, defineEmits, defineProps } from "vue";
+import chveronRight from "../assets/chevron-right.svg";
+import chveronDown from "../assets/chevron-down.svg";
 
 const props = defineProps({
   gradients: Array,
@@ -59,11 +61,11 @@ const openGradient = computed(() => {
 </script>
 
 <template>
-  <div class="bg-slate-900">
+  <div class="bg-slate-900 rounded-md">
     <div
       class="
         w-full
-        px-16
+        px-8
         py-4
         h-[36rem]
         rounded-md
@@ -73,104 +75,102 @@ const openGradient = computed(() => {
         flex flex-col flex-nowrap
       "
     >
+      <p class="text-xl font-bold mb-4">Animation Settings</p>
       <!-- <p class="text-red-500">
             Experimental feature - doesn't work in Safari, Firefox
           </p> -->
-      <div class="flex">
-        <input type="checkbox" v-model="animationToggled" />
-        <p class="pl-4">animations enabled</p>
+      <div class="flex justify-around">
+        <input
+          class="h-4 w-4 border-none rounded-md my-1 cursor-pointer"
+          type="checkbox"
+          v-model="animationToggled"
+        />
+        <p class="-ml-4 font-thin">Animations Enabled</p>
       </div>
-
-      <div v-if="!gradientSelected && gradientSelected !== 0">
+      <div>
         <div
           class="my-2 bg-slate-800 rounded-md"
           v-for="gradient in gradients"
           :key="gradient.id"
         >
           <div
-            @click="gradientSelected = gradient.id"
-            class="
-              flex
-              justify-between
-              px-4
-              py-2
-              w-full
-              rounded-md
-              cursor-pointer
+            @click="
+              gradientSelected === gradient.id
+                ? (gradientSelected = false)
+                : (gradientSelected = gradient.id)
             "
+            class="flex p-4 w-full rounded-md cursor-pointer"
           >
             <div
-              class="w-6 h-6 rounded-sm"
+              class="w-6 h-6 rounded-md mr-24"
               :style="'background-color:' + gradient.color"
             ></div>
-            edit keyframes
+            <div class="flex items-center">
+              <img
+                class="h-5 w-5"
+                :src="
+                  gradient.id === gradientSelected ? chveronDown : chveronRight
+                "
+                alt="open settings"
+              />
+              <p class="noselect">edit keyframes</p>
+            </div>
           </div>
-        </div>
-      </div>
-
-      <div
-        v-if="gradientSelected || gradientSelected === 0"
-        class="pb-4 bg-slate-600 px-6 pt-3 rounded-md"
-      >
-        <div class="flex w-full justify-center mb-3">
-          <div
-            class="w-6 h-6 rounded-sm mr-3"
-            :style="'background-color:' + openGradient.color"
-          ></div>
-          <i @click="gradientSelected = false">close</i>
-        </div>
-        <div
-          v-for="(keypoint, index) in openGradient.keypoints"
-          :key="index"
-          class="mb-6"
-        >
-          <div class="flex items-center">
-            <input
-              type="number"
-              class="bg-slate-900 pl-1 rounded-sm"
-              v-model="keypoint.time"
-              @change="changeTime(gradientSelected)"
-              min="1"
-              max="100"
-            />
-            <div>
-              <div class="bg-slate-800 rounded-md py-2 px-4 mb-3">
-                <p>
-                  X-Position:
-                  <span>
-                    <input
-                      type="number"
-                      class="bg-slate-900 pl-1 rounded-sm"
-                      v-model="keypoint.xPosition"
-                      @change="$emit('update-animation', gradientSelected)"
-                      min="1"
-                      max="100"
-                  /></span>
-                </p>
+          <div v-if="gradient.id === gradientSelected">
+            <div
+              v-for="(keypoint, index) in openGradient.keypoints"
+              :key="index"
+              class="mb-6"
+            >
+              <div class="flex items-center">
+                <input
+                  type="number"
+                  class="bg-slate-900 pl-1 rounded-sm"
+                  v-model="keypoint.time"
+                  @change="changeTime(gradientSelected)"
+                  min="1"
+                  max="100"
+                />
+                <div>
+                  <div class="bg-slate-800 rounded-md py-2 px-4 mb-3">
+                    <p>
+                      X-Position:
+                      <span>
+                        <input
+                          type="number"
+                          class="bg-slate-900 pl-1 rounded-sm"
+                          v-model="keypoint.xPosition"
+                          @change="$emit('update-animation', gradientSelected)"
+                          min="1"
+                          max="100"
+                      /></span>
+                    </p>
+                  </div>
+                  <div class="bg-slate-800 rounded-md py-2 px-4">
+                    <p>
+                      Y-Position:
+                      <span>
+                        <input
+                          type="number"
+                          class="bg-slate-900 pl-1 rounded-sm"
+                          v-model="keypoint.yPosition"
+                          @change="$emit('update-animation', gradientSelected)"
+                          min="1"
+                          max="100"
+                      /></span>
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div class="bg-slate-800 rounded-md py-2 px-4">
-                <p>
-                  Y-Position:
-                  <span>
-                    <input
-                      type="number"
-                      class="bg-slate-900 pl-1 rounded-sm"
-                      v-model="keypoint.yPosition"
-                      @change="$emit('update-animation', gradientSelected)"
-                      min="1"
-                      max="100"
-                  /></span>
-                </p>
-              </div>
+              <button
+                class="py-2 my-4 bg-cyan-400 w-1/2 rounded-md"
+                @click="createKeypoint(gradientSelected)"
+              >
+                Add Keypoint
+              </button>
             </div>
           </div>
         </div>
-        <button
-          class="py-2 mt-4 bg-green-400 w-full rounded-md"
-          @click="createKeypoint(gradientSelected)"
-        >
-          Add Keypoint
-        </button>
       </div>
     </div>
   </div>

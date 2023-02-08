@@ -33,14 +33,15 @@ const unhiddenGradients = computed(() => {
 </script>
 
 <template>
-  <div id="gradient" :style="cssString">
+  <div class="rounded-md" id="gradient" :style="cssString">
     <div
       class="
-        w-[25.5rem]
-        h-[25.5rem]
+        w-[32rem]
+        h-[32rem]
         -m-6
         bg-transparent
         border-2 border-dashed border-gray-500/50
+        rounded-md
       "
     >
       <vue-resizable
