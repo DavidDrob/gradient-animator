@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive, defineEmits, defineProps } from "vue";
+import { computed, reactive, defineEmits, defineProps, onMounted } from "vue";
 import VueResizable from "vue-resizable";
 
 const props = defineProps({
@@ -8,6 +8,12 @@ const props = defineProps({
 });
 
 const emit = defineEmits(["move-point"]);
+
+onMounted(() => {
+  const canvas = document.querySelector("#canvas");
+  canvasSettings.width = canvas.offsetWidth;
+  canvasSettings.height = canvas.offsetHeight;
+});
 
 const canvasSettings = reactive({
   width: 384,
@@ -43,6 +49,7 @@ const unhiddenGradients = computed(() => {
         border-2 border-dashed border-gray-500/50
         rounded-md
       "
+      id="canvas"
     >
       <vue-resizable
         v-for="gradient in unhiddenGradients"
@@ -62,7 +69,11 @@ const unhiddenGradients = computed(() => {
         <div class="drag-container" :id="gradient.id">
           <img
             src="../assets/circle.svg"
-            style="user-drag: none; user-select: none; transform: scale(10, 10)"
+            style="
+              user-drag: none;
+              user-select: none;
+              transform: scale(10, 10) translate(-0.25px, -0.25px);
+            "
             alt="point"
           />
         </div>
