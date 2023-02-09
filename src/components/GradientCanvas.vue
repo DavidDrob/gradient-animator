@@ -1,8 +1,16 @@
 <script setup>
-import { computed, reactive, defineEmits, defineProps, onMounted } from "vue";
+import {
+  computed,
+  reactive,
+  defineEmits,
+  defineProps,
+  onMounted,
+  watch,
+} from "vue";
 import VueResizable from "vue-resizable";
 
 const props = defineProps({
+  screenSize: String,
   gradients: Array,
   cssString: String,
 });
@@ -10,15 +18,28 @@ const props = defineProps({
 const emit = defineEmits(["move-point"]);
 
 onMounted(() => {
-  const canvas = document.querySelector("#canvas");
-  canvasSettings.width = canvas.offsetWidth;
-  canvasSettings.height = canvas.offsetHeight;
+  adjustCanvasSettings();
 });
+
+watch(
+  () => props.screenSize,
+  (newValue, oldValue) => {
+    setTimeout(() => {
+      adjustCanvasSettings();
+    }, 1);
+  }
+);
 
 const canvasSettings = reactive({
   width: 384,
   height: 384,
 });
+
+function adjustCanvasSettings() {
+  const canvas = document.querySelector("#canvas");
+  canvasSettings.width = canvas.offsetWidth;
+  canvasSettings.height = canvas.offsetHeight;
+}
 
 function positionHandler(e) {
   const element = parseInt(e.cmp.dragElements[0].id);
@@ -36,19 +57,26 @@ function positionHandler(e) {
 const unhiddenGradients = computed(() => {
   return props.gradients.filter((gradient) => !gradient.hidden);
 });
+
+const screenOptions = computed(() => {
+  const options = {
+    normal: "height: 32rem; width: 32rem",
+    large: "height: 50vh; width: 90vw",
+  };
+  return options[props.screenSize];
+});
 </script>
 
 <template>
   <div class="rounded-md" id="gradient" :style="cssString">
     <div
       class="
-        w-[32rem]
-        h-[32rem]
         -m-6
         bg-transparent
         border-2 border-dashed border-gray-500/50
         rounded-md
       "
+      :style="screenOptions"
       id="canvas"
     >
       <vue-resizable

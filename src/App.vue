@@ -46,6 +46,7 @@ const animationTimeCss = computed(() => {
   return animationTime.value + "s";
 });
 const animationEasing = ref("ease-in-out");
+const screenSize = ref("normal");
 
 const animationsEnabledGlobally = ref(false);
 const openKeypoint = ref(false);
@@ -333,8 +334,12 @@ function changeGradient(payload) {
     </div>
   </main>
   <div class="bg-white flex items-start">
-    <div class="w-full flex flex-wrap justify-around items-center mx-32 mt-20">
+    <div
+      class="w-full flex flex-wrap justify-around items-center mx-32 mt-20"
+      :class="[screenSize === 'large' ? 'flex-col' : 'flex-row']"
+    >
       <GradientCanvas
+        :screen-size="screenSize"
         :gradients="gradients"
         :css-string="cssString()"
         @move-point="updateGradient"
@@ -360,6 +365,10 @@ function changeGradient(payload) {
           @update-animation="changeAnimations"
         />
       </div>
+      <select v-model="screenSize">
+        <option value="normal">Normal</option>
+        <option value="large">Large</option>
+      </select>
     </div>
   </div>
   <div class="w-full mt-32 text-white font-semibold bg-slate-600 px-4">
