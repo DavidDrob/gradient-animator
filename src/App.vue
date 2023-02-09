@@ -130,7 +130,14 @@ function changeAnimations(id) {
   removeGradient(id);
   gradients.value.push(newGradient);
 
-  properties.value = [];
+  // remove old properties from the array
+  const oldProperties = properties.value.filter((element) =>
+    element.includes(`--${id}-`)
+  );
+  oldProperties.forEach((a) => {
+    const index = properties.value.indexOf(a);
+    if (index > -1) properties.value.splice(index, 1);
+  });
 
   window.CSS.registerProperty({
     name: `--${newGradient.id}-x-position`,
