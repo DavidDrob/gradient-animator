@@ -6,14 +6,36 @@ import chveronDown from "../assets/chevron-down.svg";
 const props = defineProps({
   gradients: Array,
   animationsEnabled: Boolean,
+  animationTime: Number,
+  animationEasing: String,
   gradientSelected: { default: false },
 });
 
 const emit = defineEmits([
   "update:animationsEnabled",
+  "update:animationTime",
+  "update:animationEasing",
   "update-animation",
   "update:gradientSelected",
 ]);
+
+const animationTime = computed({
+  get() {
+    return props.animationTime;
+  },
+  set(value) {
+    emit("update:animationTime", value);
+  },
+});
+
+const animationEasing = computed({
+  get() {
+    return props.animationEasing;
+  },
+  set(value) {
+    emit("update:animationEasing", value);
+  },
+});
 
 const animationToggled = computed({
   get() {
@@ -162,14 +184,25 @@ const openGradient = computed(() => {
                   </div>
                 </div>
               </div>
-              <button
-                class="py-2 my-4 bg-cyan-400 w-1/2 rounded-md"
-                @click="createKeypoint(gradientSelected)"
-              >
-                Add Keypoint
-              </button>
             </div>
+            <button
+              class="py-2 mb-4 bg-cyan-400 w-1/2 rounded-md"
+              @click="createKeypoint(gradientSelected)"
+            >
+              Add Keypoint
+            </button>
           </div>
+        </div>
+        <div class="my-2 bg-slate-800 rounded-md">
+          time:
+          <input class="bg-slate-700" v-model="animationTime" type="number" />
+          <br />
+          easing:
+          <select class="bg-slate-700" v-model="animationEasing">
+            <option value="ease-in-out">ease-in-out</option>
+            <option value="ease-in">ease-in</option>
+            <option value="ease-out">ease-out</option>
+          </select>
         </div>
       </div>
     </div>

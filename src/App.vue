@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import GradientCanvas from "./components/GradientCanvas.vue";
 import GradientSettings from "./components/GradientSettings.vue";
 import AnimationSettings from "./components/AnimationSettings.vue";
@@ -41,6 +41,11 @@ const gradients = ref([
 
 const animationCSSString = ref("");
 const properties = ref([]);
+const animationTime = ref(10);
+const animationTimeCss = computed(() => {
+  return animationTime.value + "s";
+});
+const animationEasing = ref("ease-in-out");
 
 const animationsEnabledGlobally = ref(false);
 const openKeypoint = ref(false);
@@ -350,6 +355,8 @@ function changeGradient(payload) {
           :gradients="gradients"
           v-model:gradientSelected="openKeypoint"
           v-model:animationsEnabled="animationsEnabledGlobally"
+          v-model:animationTime="animationTime"
+          v-model:animationEasing="animationEasing"
           @update-animation="changeAnimations"
         />
       </div>
@@ -382,7 +389,8 @@ function changeGradient(payload) {
 #gradient {
   animation-name: main;
   animation-iteration-count: infinite;
-  animation-duration: 2s;
+  animation-duration: v-bind(animationTimeCss);
+  transition-timing-function: v-bind(animationEasing);
 }
 
 .noselect {
