@@ -127,8 +127,7 @@ function changeAnimations(id) {
 
   if (openKeypoint.value === id) openKeypoint.value = newGradient.id;
 
-  removeGradient(id);
-  gradients.value.push(newGradient);
+  gradients.value.splice(gradients.value.indexOf(gradient), 1, newGradient);
 
   // remove old properties from the array
   const oldProperties = properties.value.filter((element) =>
