@@ -142,47 +142,19 @@ const openGradient = computed(() => {
             <div
               v-for="(keypoint, index) in openGradient.keypoints"
               :key="index"
-              class="mb-6"
+              class="mb-6 bg-slate-700 py-4 mx-4 rounded-md"
             >
-              <div class="flex items-center">
+              <div class="flex justify-between mx-4">
                 <input
                   type="number"
-                  class="bg-slate-900 pl-1 rounded-sm"
+                  class="bg-slate-700 pl-1 rounded-sm"
                   v-model="keypoint.time"
                   @change="changeTime(gradientSelected)"
                   min="1"
                   max="100"
                 />
-                <div>
-                  <div class="bg-slate-800 rounded-md py-2 px-4 mb-3">
-                    <p>
-                      X-Position:
-                      <span>
-                        <input
-                          type="number"
-                          class="bg-slate-900 pl-1 rounded-sm"
-                          v-model="keypoint.xPosition"
-                          @change="$emit('update-animation', gradientSelected)"
-                          min="1"
-                          max="100"
-                      /></span>
-                    </p>
-                  </div>
-                  <div class="bg-slate-800 rounded-md py-2 px-4">
-                    <p>
-                      Y-Position:
-                      <span>
-                        <input
-                          type="number"
-                          class="bg-slate-900 pl-1 rounded-sm"
-                          v-model="keypoint.yPosition"
-                          @change="$emit('update-animation', gradientSelected)"
-                          min="1"
-                          max="100"
-                      /></span>
-                    </p>
-                  </div>
-                </div>
+
+                <div class="cursor-pointer">Change Position</div>
               </div>
             </div>
             <button
@@ -193,16 +165,34 @@ const openGradient = computed(() => {
             </button>
           </div>
         </div>
-        <div class="my-2 bg-slate-800 rounded-md">
-          time:
-          <input class="bg-slate-700" v-model="animationTime" type="number" />
-          <br />
-          easing:
-          <select class="bg-slate-700" v-model="animationEasing">
-            <option value="ease-in-out">ease-in-out</option>
-            <option value="ease-in">ease-in</option>
-            <option value="ease-out">ease-out</option>
-          </select>
+        <div class="my-2 py-4 flex justify-between bg-slate-800 rounded-md">
+          <div class="flex flex-col ml-4">
+            <p class="font-bold">Duration</p>
+            <input
+              class="bg-slate-700 w-12 pl-2 mt-2 rounded-md"
+              v-model="animationTime"
+              type="number"
+            />
+          </div>
+          <div class="flex flex-col w-full mx-8">
+            <p class="font-bold">Easing</p>
+            <select
+              class="bg-slate-700 px-2 py-1 w-full mt-2 rounded-md"
+              v-model="animationEasing"
+            >
+              <option value="ease-in-out">ease-in-out</option>
+              <option value="ease-in">ease-in</option>
+              <option value="ease-out">ease-out</option>
+            </select>
+          </div>
+          <div class="flex flex-col w-12 mr-4">
+            <p class="font-bold">Reset</p>
+            <input
+              class="h-4 w-4 rounded-md cursor-pointer mt-4"
+              type="checkbox"
+              v-model="animationToggled"
+            />
+          </div>
         </div>
       </div>
     </div>

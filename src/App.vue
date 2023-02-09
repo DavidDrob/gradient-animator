@@ -334,42 +334,63 @@ function changeGradient(payload) {
     </div>
   </main>
   <div class="bg-white flex items-start">
-    <div
-      class="w-full flex flex-wrap justify-around items-center mx-32 mt-20"
-      :class="[screenSize === 'large' ? 'flex-col' : 'flex-row']"
-    >
-      <GradientCanvas
-        :screen-size="screenSize"
-        :gradients="gradients"
-        :css-string="cssString()"
-        @move-point="updateGradient"
-      />
-
-      <div class="flex mt-12">
-        <GradientSettings
-          class="mr-12"
+    <main class="w-full mx-32">
+      <div
+        class="w-full flex flex-wrap justify-around items-center mt-20"
+        :class="[screenSize === 'large' ? 'flex-col' : 'flex-row']"
+      >
+        <GradientCanvas
+          :screen-size="screenSize"
           :gradients="gradients"
-          @change-gradient="changeGradient"
-          :max-id-global="maxIdGlobal"
-          @update-max-id="(newId) => (maxIdGlobal = newId)"
-          @disable-animation="animationsEnabledGlobally = false"
-          v-model:bg-color="bgColor"
+          :css-string="cssString()"
+          @move-point="updateGradient"
         />
 
-        <AnimationSettings
-          :gradients="gradients"
-          v-model:gradientSelected="openKeypoint"
-          v-model:animationsEnabled="animationsEnabledGlobally"
-          v-model:animationTime="animationTime"
-          v-model:animationEasing="animationEasing"
-          @update-animation="changeAnimations"
-        />
+        <div class="flex mt-12">
+          <GradientSettings
+            class="mr-12"
+            :gradients="gradients"
+            @change-gradient="changeGradient"
+            :max-id-global="maxIdGlobal"
+            @update-max-id="(newId) => (maxIdGlobal = newId)"
+            @disable-animation="animationsEnabledGlobally = false"
+            v-model:bg-color="bgColor"
+          />
+
+          <AnimationSettings
+            :gradients="gradients"
+            v-model:gradientSelected="openKeypoint"
+            v-model:animationsEnabled="animationsEnabledGlobally"
+            v-model:animationTime="animationTime"
+            v-model:animationEasing="animationEasing"
+            @update-animation="changeAnimations"
+          />
+        </div>
       </div>
-      <select v-model="screenSize">
-        <option value="normal">Normal</option>
-        <option value="large">Large</option>
-      </select>
-    </div>
+      <div class="mt-8 mr-16 py-4 flex items-center justify-end">
+        <select
+          class="bg-slate-700 text-white py-2 px-4 font-bold rounded-md"
+          v-model="screenSize"
+        >
+          <option value="normal">Normal</option>
+          <option value="large">Large</option>
+        </select>
+        <button
+          class="
+            font-bold
+            px-5
+            py-2
+            rounded-md
+            ml-10
+            hover:shadow-md
+            bg-cyan-400
+            text-white
+          "
+        >
+          <p>Copy CSS</p>
+        </button>
+      </div>
+    </main>
   </div>
   <div class="w-full mt-32 text-white font-semibold bg-slate-600 px-4">
     <div>
