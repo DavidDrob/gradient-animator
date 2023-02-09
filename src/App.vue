@@ -3,6 +3,7 @@ import { ref, watch, onMounted, computed } from "vue";
 import GradientCanvas from "./components/GradientCanvas.vue";
 import GradientSettings from "./components/GradientSettings.vue";
 import AnimationSettings from "./components/AnimationSettings.vue";
+import CSSModal from "./components/CSSModal.vue";
 
 const bgColor = ref("#2f1d49");
 
@@ -97,7 +98,7 @@ const cssString = () => {
       gradient.keypoints.length > 0 && animationsEnabledGlobally.value
     );
   });
-  return baseString + bgColor.value;
+  return baseString + bgColor.value + ";";
 };
 
 function createCSS(id, x, y, color, strength, animationsEnabled) {
@@ -375,35 +376,14 @@ function changeGradient(payload) {
           <option value="normal">Normal</option>
           <option value="large">Large</option>
         </select>
-        <button
-          class="
-            font-bold
-            px-5
-            py-2
-            rounded-md
-            ml-10
-            hover:shadow-md
-            bg-cyan-400
-            text-white
-          "
-        >
-          <p>Copy CSS</p>
-        </button>
+        <CSSModal
+          :css-string="cssString()"
+          :animations-enabled="animationsEnabledGlobally"
+          :properties="properties"
+          :animation-css-string="animationCSSString"
+        />
       </div>
     </main>
-  </div>
-  <div class="w-full mt-32 text-white font-semibold bg-slate-600 px-4">
-    <div>
-      <span>Copy the CSS</span> <br />
-      <span>{{ cssString() }};</span>
-    </div>
-    <div v-if="animationCSSString">
-      <span>Copy the CSS</span> <br />
-      <span v-for="property in properties" :key="property">{{ property }}</span>
-      <br />
-      <span>{{ animationCSSString }}</span> <br />
-      <span>Add `animation-name: main;` to an element you want to animate</span>
-    </div>
   </div>
 </template>
 
