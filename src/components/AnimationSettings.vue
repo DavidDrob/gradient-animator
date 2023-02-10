@@ -2,6 +2,7 @@
 import { computed, defineEmits, defineProps } from "vue";
 import chveronRight from "../assets/chevron-right.svg";
 import chveronDown from "../assets/chevron-down.svg";
+import trash from "../assets/trash.svg";
 
 const props = defineProps({
   gradients: Array,
@@ -65,6 +66,10 @@ function changeTime(id) {
   }, 750);
 
   emit("update-animation", gradientSelected.value);
+}
+
+function removeKeypoint(gradient, keypointId) {
+  gradient.keypoints.splice(keypointId, 1);
 }
 
 function createKeypoint(id) {
@@ -177,7 +182,13 @@ const openGradient = computed(() => {
               :key="index"
               class="mb-6 bg-slate-700 py-4 mx-4 rounded-md"
             >
-              <div class="flex justify-between mx-4">
+              <div class="flex items-center justify-between mx-4">
+                <img
+                  class="w-6 -mr-6 cursor-pointer"
+                  @click="removeKeypoint(openGradient, index)"
+                  :src="trash"
+                  alt="remove"
+                />
                 <input
                   type="number"
                   class="bg-slate-700 pl-1 rounded-sm"
