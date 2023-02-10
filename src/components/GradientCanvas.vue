@@ -13,9 +13,10 @@ const props = defineProps({
   screenSize: String,
   gradients: Array,
   cssString: String,
+  editingKeypoint: Object,
 });
 
-const emit = defineEmits(["move-point"]);
+const emit = defineEmits(["move-point", "move-keypoint"]);
 
 onMounted(() => {
   adjustCanvasSettings();
@@ -47,14 +48,34 @@ function positionHandler(e) {
   const newX = (e.left / canvasSettings.width) * 100;
   const newY = (e.top / canvasSettings.height) * 100;
 
-  emit("move-point", {
-    id: element,
-    newPositions: { x: newX, y: newY },
-    event: e.eventName,
-  });
+  if (props.editingKeypoint.gradient) {
+    emit("move-keypoint", {
+      id: props.editingKeypoint.gradient.id,
+      keypoint: props.editingKeypoint.keypoint,
+      newPositions: { x: newX, y: newY },
+      event: e.eventName,
+    });
+  } else {
+    emit("move-point", {
+      id: element,
+      newPositions: { x: newX, y: newY },
+      event: e.eventName,
+    });
+  }
 }
 
-const unhiddenGradients = computed(() => {
+const gradientHandlers = computed(() => {
+  const id = props.editingKeypoint?.keypoint;
+
+  if (props.editingKeypoint.gradient) {
+    return [
+      {
+        id: id,
+        xPosition: props.editingKeypoint.gradient?.keypoints[id].xPosition,
+        yPosition: props.editingKeypoint.gradient?.keypoints[id].yPosition,
+      },
+    ];
+  }
   return props.gradients.filter((gradient) => !gradient.hidden);
 });
 
@@ -80,7 +101,7 @@ const screenOptions = computed(() => {
       id="canvas"
     >
       <vue-resizable
-        v-for="gradient in unhiddenGradients"
+        v-for="gradient in gradientHandlers"
         :key="gradient.id"
         dragSelector=".drag-container"
         :active="[]"

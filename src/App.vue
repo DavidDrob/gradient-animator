@@ -32,8 +32,8 @@ const gradients = ref([
     hidden: false,
     keypoints: [
       {
-        xPosition: 100,
-        yPosition: 20,
+        xPosition: 0,
+        yPosition: 100,
         time: 48,
       },
     ],
@@ -42,7 +42,7 @@ const gradients = ref([
 
 const animationCSSString = ref("");
 const properties = ref([]);
-const animationTime = ref(10);
+const animationTime = ref(2);
 const animationTimeCss = computed(() => {
   return animationTime.value + "s";
 });
@@ -129,6 +129,10 @@ function changeAnimations(id) {
     hidden: gradient.hidden,
     keypoints: gradient.keypoints,
   };
+
+  if (editingKeypoint.value?.gradient?.id == gradient?.id) {
+    editingKeypoint.value.gradient.id = newGradient.id;
+  }
 
   highestId.value += 1;
 
@@ -272,6 +276,39 @@ function updateGradient(payload) {
 function changeGradient(payload) {
   gradients.value = payload;
 }
+
+function updateKeypoint(payload) {
+  if (payload.event === "drag:start" && animationsEnabledGlobally.value) {
+    animationStarted.value = true;
+  }
+  animationsEnabledGlobally.value = false;
+
+  const id = gradients.value.findIndex(
+    (gradient) => gradient.id === payload.id
+  );
+
+  const x = payload.newPositions.x;
+  if (x >= -10 && x <= 110)
+    gradients.value[id].keypoints[payload.keypoint].xPosition = x;
+
+  const y = payload.newPositions.y;
+  if (y >= -10 && y <= 110)
+    gradients.value[id].keypoints[payload.keypoint].yPosition = y;
+
+  setTimeout(() => {
+    if (animationStarted.value && payload.event === "drag:end") {
+      animationsEnabledGlobally.value = true;
+      animationStarted.value = false;
+    }
+  }, 500);
+}
+
+const editingKeypoint = ref({});
+
+function editKeypoint(obj) {
+  animationsEnabledGlobally.value = true;
+  editingKeypoint.value = obj;
+}
 </script>
 
 <template>
@@ -344,7 +381,9 @@ function changeGradient(payload) {
           :screen-size="screenSize"
           :gradients="gradients"
           :css-string="cssString()"
+          :editing-keypoint="editingKeypoint"
           @move-point="updateGradient"
+          @move-keypoint="updateKeypoint"
         />
 
         <div class="flex mt-12">
@@ -360,11 +399,13 @@ function changeGradient(payload) {
 
           <AnimationSettings
             :gradients="gradients"
+            :editing-keypoint="editingKeypoint"
             v-model:gradientSelected="openKeypoint"
             v-model:animationsEnabled="animationsEnabledGlobally"
             v-model:animationTime="animationTime"
             v-model:animationEasing="animationEasing"
             @update-animation="changeAnimations"
+            @edit-keypoint="editKeypoint"
           />
         </div>
       </div>

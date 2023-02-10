@@ -72,7 +72,7 @@ function copyCSS() {
             <p>
               {{ cssString }}
             </p>
-            <div v-if="withAnimations">
+            <div v-if="withAnimations && animationsEnabled">
               <br />
               <p v-for="property in properties" :key="property">
                 {{ property }}

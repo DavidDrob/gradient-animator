@@ -9,6 +9,7 @@ const props = defineProps({
   animationTime: Number,
   animationEasing: String,
   gradientSelected: { default: false },
+  editingKeypoint: Object,
 });
 
 const emit = defineEmits([
@@ -17,6 +18,7 @@ const emit = defineEmits([
   "update:animationEasing",
   "update-animation",
   "update:gradientSelected",
+  "edit-keypoint",
 ]);
 
 const animationTime = computed({
@@ -66,6 +68,9 @@ function changeTime(id) {
 }
 
 function createKeypoint(id) {
+  const oldKeypoint =
+    props.editingKeypoint?.gradient?.keypoints[props.editingKeypoint?.keypoint]
+      .time;
   const gradient = props.gradients.find((g) => g.id === id);
   gradient.keypoints.push({
     xPosition: 80,
@@ -75,7 +80,35 @@ function createKeypoint(id) {
   gradient.keypoints.sort((a, b) => {
     return a.time - b.time;
   });
+  props.editingKeypoint.keypoint = gradient.keypoints.findIndex(
+    (k) => k.time === oldKeypoint
+  );
 }
+
+function changePosition(gradient, keypointId) {
+  let obj;
+  if (
+    gradient.id != props.editingKeypoint?.gradient?.id ||
+    keypointId != props.editingKeypoint.keypoint
+  ) {
+    obj = {
+      gradient: gradient,
+      keypoint: keypointId,
+    };
+  } else obj = {};
+
+  emit("edit-keypoint", obj);
+}
+
+const ctaMessage = (gradient, keypointId) => {
+  if (
+    gradient.id === props.editingKeypoint?.gradient?.id &&
+    keypointId === props.editingKeypoint.keypoint
+  ) {
+    return "Done editing";
+  }
+  return "Change Position";
+};
 
 const openGradient = computed(() => {
   return props.gradients.find((g) => g.id == props.gradientSelected);
@@ -154,7 +187,12 @@ const openGradient = computed(() => {
                   max="100"
                 />
 
-                <div class="cursor-pointer">Change Position</div>
+                <div
+                  class="cursor-pointer"
+                  @click="changePosition(openGradient, index)"
+                >
+                  {{ ctaMessage(openGradient, index) }}
+                </div>
               </div>
             </div>
             <button
