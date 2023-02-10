@@ -1,26 +1,32 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   cssString: String,
   properties: Array,
   animationCssString: String,
   animationsEnabled: Boolean,
+  animationDuration: String,
+  animationEasing: String,
 });
 
+const emit = defineEmits(["update:animationsEnabled"]);
+
 const modalOpen = ref(false);
-const withAnimations = ref(true);
 
 function copyCSS() {
-  let text = props.cssString;
-  if (withAnimations.value) {
-    props.properties.forEach((property) => {
-      text += property;
-    });
-    text += props.animationCssString;
-  }
+  let text = document.querySelector("#cssCode").textContent;
   navigator.clipboard.writeText(text);
 }
+
+const animationToggled = computed({
+  get() {
+    return props.animationsEnabled;
+  },
+  set(value) {
+    emit("update:animationsEnabled", value);
+  },
+});
 </script>
 
 <template>
@@ -60,19 +66,27 @@ function copyCSS() {
         <p class="text-xl font-bold pt-4 text-gray-800">
           Copy the following CSS
         </p>
-        <p class="text-gray-800">
-          And add
-          <code class="bg-gray-200 px-1">animation-name: main;</code>
-          to an element you want to animate
-        </p>
         <div class="flex items-baseline justify-between px-6 space-y-6">
           <code
             class="text-base text-left leading-relaxed text-gray-600 w-2/3 pr-4"
+            id="cssCode"
           >
-            <p>
-              {{ cssString }}
-            </p>
-            <div v-if="withAnimations && animationsEnabled">
+            <div>
+              .your-element { <br />
+              <div class="pl-3">
+                {{ cssString }} <br />
+                <div v-if="animationToggled">
+                  animation-name: main; <br />
+                  animation-iteration-count: infinite; <br />
+                  animation-duration: {{ animationDuration }}; <br />
+                  transition-timing-function: {{ animationEasing }} <br />
+                </div>
+              </div>
+
+              }
+            </div>
+            <p></p>
+            <div v-if="animationToggled">
               <br />
               <p v-for="property in properties" :key="property">
                 {{ property }}
@@ -87,16 +101,16 @@ function copyCSS() {
             <div
               class="h-72 w-56 mb-2 rounded-md noselect"
               :style="cssString"
-              :id="withAnimations ? 'gradient' : ''"
+              :id="animationToggled ? 'gradient' : ''"
             >
               &nbsp;
             </div>
-            <div v-if="animationsEnabled">
+            <div>
               <span> Animations: </span>
               <input
                 class="h-4 w-4 border-none rounded-md my-1 cursor-pointer"
                 type="checkbox"
-                v-model="withAnimations"
+                v-model="animationToggled"
               />
             </div>
           </div>

@@ -419,9 +419,11 @@ function editKeypoint(obj) {
         </select>
         <CSSModal
           :css-string="cssString()"
-          :animations-enabled="animationsEnabledGlobally"
+          v-model:animations-enabled="animationsEnabledGlobally"
           :properties="properties"
           :animation-css-string="animationCSSString"
+          :animation-duration="animationTimeCss"
+          :animation-easing="animationEasing"
         />
       </div>
     </main>
