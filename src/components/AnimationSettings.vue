@@ -184,7 +184,7 @@ const openGradient = computed(() => {
             >
               <div class="flex items-center justify-between mx-4">
                 <img
-                  class="w-6 -mr-6 cursor-pointer"
+                  class="w-6 mr-4 cursor-pointer"
                   @click="removeKeypoint(openGradient, index)"
                   :src="trash"
                   alt="remove"
@@ -214,8 +214,8 @@ const openGradient = computed(() => {
             </button>
           </div>
         </div>
-        <div class="my-2 py-4 flex justify-between bg-slate-800 rounded-md">
-          <div class="flex flex-col ml-4">
+        <div class="my-2 p-4 flex justify-between bg-slate-800 rounded-md">
+          <div class="flex flex-col">
             <p class="font-bold">Duration</p>
             <input
               class="bg-slate-700 w-12 pl-2 mt-2 rounded-md"
@@ -223,8 +223,8 @@ const openGradient = computed(() => {
               type="number"
             />
           </div>
-          <div class="flex flex-col w-full mx-8">
-            <p class="font-bold">Easing</p>
+          <div class="flex flex-col ml-8">
+            <p class="font-bold text-left">Easing</p>
             <select
               class="bg-slate-700 px-2 py-1 w-full mt-2 rounded-md"
               v-model="animationEasing"
@@ -233,14 +233,6 @@ const openGradient = computed(() => {
               <option value="ease-in">ease-in</option>
               <option value="ease-out">ease-out</option>
             </select>
-          </div>
-          <div class="flex flex-col w-12 mr-4">
-            <p class="font-bold">Reset</p>
-            <input
-              class="h-4 w-4 rounded-md cursor-pointer mt-4"
-              type="checkbox"
-              v-model="animationToggled"
-            />
           </div>
         </div>
       </div>
