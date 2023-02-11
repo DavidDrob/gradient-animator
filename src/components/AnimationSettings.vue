@@ -135,7 +135,7 @@ const openGradient = computed(() => {
         flex flex-col flex-nowrap
       "
     >
-      <p class="text-xl font-bold mb-4">Animation Settings</p>
+      <p class="text-2xl font-semibold mb-4">Animation Settings</p>
       <!-- <p class="text-red-500">
             Experimental feature - doesn't work in Safari, Firefox
           </p> -->
@@ -145,7 +145,7 @@ const openGradient = computed(() => {
           type="checkbox"
           v-model="animationToggled"
         />
-        <p class="-ml-4 font-thin">Animations Enabled</p>
+        <p class="-ml-4 font-light">Animations Enabled</p>
       </div>
       <div>
         <div
@@ -173,7 +173,7 @@ const openGradient = computed(() => {
                 "
                 alt="open settings"
               />
-              <p class="noselect">edit keyframes</p>
+              <p class="noselect font-light">edit keyframes</p>
             </div>
           </div>
           <div v-if="gradient.id === gradientSelected">
@@ -191,7 +191,7 @@ const openGradient = computed(() => {
                 />
                 <input
                   type="number"
-                  class="bg-slate-700 pl-1 rounded-sm"
+                  class="bg-slate-700 pl-1 font-light rounded-sm"
                   v-model="keypoint.time"
                   @change="changeTime(gradientSelected)"
                   min="1"
@@ -199,7 +199,7 @@ const openGradient = computed(() => {
                 />
 
                 <div
-                  class="cursor-pointer"
+                  class="cursor-pointer font-light"
                   @click="changePosition(openGradient, index)"
                 >
                   {{ ctaMessage(openGradient, index) }}
@@ -216,22 +216,24 @@ const openGradient = computed(() => {
         </div>
         <div class="my-2 p-4 flex justify-between bg-slate-800 rounded-md">
           <div class="flex flex-col">
-            <p class="font-bold">Duration</p>
+            <p class="font-semibold">Duration</p>
             <input
-              class="bg-slate-700 w-12 pl-2 mt-2 rounded-md"
+              class="bg-slate-700 w-12 pl-2 mt-2 font-light rounded-md"
               v-model="animationTime"
               type="number"
             />
           </div>
           <div class="flex flex-col ml-8">
-            <p class="font-bold text-left">Easing</p>
+            <p class="font-semibold text-left">Easing</p>
             <select
-              class="bg-slate-700 px-2 py-1 w-full mt-2 rounded-md"
+              class="bg-slate-700 px-2 py-1 w-full mt-2 font-light rounded-md"
               v-model="animationEasing"
             >
-              <option value="ease-in-out">ease-in-out</option>
-              <option value="ease-in">ease-in</option>
-              <option value="ease-out">ease-out</option>
+              <option class="font-light" value="ease-in-out">
+                ease-in-out
+              </option>
+              <option class="font-light" value="ease-in">ease-in</option>
+              <option class="font-light" value="ease-out">ease-out</option>
             </select>
           </div>
         </div>

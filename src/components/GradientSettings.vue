@@ -98,7 +98,7 @@ function onDrop(dropResult) {
       flex flex-col flex-nowrap
     "
   >
-    <p class="text-xl font-bold mb-4">Gradient Settings</p>
+    <p class="text-2xl font-semibold mb-4">Gradient Settings</p>
     <Container
       @drop="onDrop"
       drag-class="opacity-ghost"
@@ -114,6 +114,7 @@ function onDrop(dropResult) {
               bg-slate-900
               p-6
               rounded-l-md
+              text-xl
             "
             >&#x2630;</span
           >
@@ -133,9 +134,9 @@ function onDrop(dropResult) {
                   alt="hide"
                 />
               </div>
-              <div class="grid place-items-center py-1 mx-8">
+              <div class="grid place-items-center py-2 mx-8">
                 <input
-                  class="w-8 h-8 mb-2 bg-transparent"
+                  class="w-8 h-8 mb-1 bg-transparent"
                   id="color"
                   type="color"
                   v-model="gradient.color"
@@ -156,7 +157,7 @@ function onDrop(dropResult) {
       </Draggable>
       <div class="flex flex-col items-center py-2">
         <div class="flex flex-col bg-slate-800 w-full rounded-md py-2">
-          <p class="font-semibold mb-2">Background Color</p>
+          <p class="font-light mb-2">Background Color</p>
           <div class="w-full flex justify-center items-center">
             <input
               class="mr-4 w-8 h-8 bg-transparent"
@@ -165,7 +166,7 @@ function onDrop(dropResult) {
               :value="bgColor"
               @input="$emit('update:bg-color', $event.target.value)"
             />
-            <h1>{{ bgColor }}</h1>
+            <p class="font-thin">{{ bgColor }}</p>
           </div>
         </div>
         <div class="w-full mt-4 flex justify-center">

@@ -336,8 +336,8 @@ function editKeypoint(obj) {
     style="height: 40vh"
   >
     <div class="font-bold text-white">
-      <h1 class="text-5xl">Gradients play a big part in modern web design.</h1>
-      <h2 class="text-4xl mt-4">
+      <h1 class="text-4xl">Gradients play a big part in modern web design.</h1>
+      <h2 class="text-5xl mt-4">
         Create and animate them using
         <span class="text-cyan-400">Gradient Tool</span>
       </h2>
@@ -432,7 +432,7 @@ function editKeypoint(obj) {
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Inter", "Avenir", "Helvetica", "Arial", "sans-serif";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
