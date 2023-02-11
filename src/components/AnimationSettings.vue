@@ -136,9 +136,6 @@ const openGradient = computed(() => {
       "
     >
       <p class="text-2xl font-semibold mb-4">Animation Settings</p>
-      <!-- <p class="text-red-500">
-            Experimental feature - doesn't work in Safari, Firefox
-          </p> -->
       <div class="flex justify-center items-center w-full mb-2">
         <div class="w-fit flex">
           <p class="mr-4 font-light">Animations Enabled</p>

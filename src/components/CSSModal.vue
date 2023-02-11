@@ -67,6 +67,9 @@ const animationToggled = computed({
         <p class="text-xl font-bold pt-4 text-gray-800">
           Copy the following CSS
         </p>
+        <p class="text-lg font-light text-yellow-400/80">
+          As of right now the animations don't work in Safari and Firefox
+        </p>
         <div class="flex items-baseline justify-between px-6 space-y-6">
           <code
             class="text-base text-left leading-relaxed text-gray-600 w-2/3 pr-4"
