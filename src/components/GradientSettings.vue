@@ -36,7 +36,7 @@ function hideGradient(index) {
 
   props.gradients[gradient].hidden = !props.gradients[gradient].hidden;
   emit("change-gradient", props.gradients);
-  emit("disable-animation");
+  // emit("disable-animation");
 }
 
 function createGradient() {
@@ -118,7 +118,7 @@ function onDrop(dropResult) {
             "
             >&#x2630;</span
           >
-          <div class="flex bg-gray-800 rounded-r-md pr-4">
+          <div class="flex bg-gray-800 w-full rounded-r-md pr-4">
             <div class="flex">
               <div class="flex">
                 <img
@@ -134,14 +134,14 @@ function onDrop(dropResult) {
                   alt="hide"
                 />
               </div>
-              <div class="grid place-items-center py-2 mx-8">
+              <div class="grid place-items-center py-2 mx-8 w-20">
                 <input
                   class="w-8 h-8 mb-1 bg-transparent"
                   id="color"
                   type="color"
                   v-model="gradient.color"
                 />
-                <h1 class="font-thin">{{ gradient.color }}</h1>
+                <h1 class="font-thin">{{ gradient.color.toUpperCase() }}</h1>
               </div>
             </div>
             <div class="flex flex-col justify-center">
@@ -166,7 +166,7 @@ function onDrop(dropResult) {
               :value="bgColor"
               @input="$emit('update:bg-color', $event.target.value)"
             />
-            <p class="font-thin">{{ bgColor }}</p>
+            <p class="font-thin">{{ bgColor.toUpperCase() }}</p>
           </div>
         </div>
         <div class="w-full mt-4 flex justify-center">

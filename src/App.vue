@@ -6,7 +6,7 @@ import AnimationSettings from "./components/AnimationSettings.vue";
 import CSSModal from "./components/CSSModal.vue";
 import GradientLibrary from "./components/GradientLibrary.vue";
 
-const bgColor = ref("#2f1d49");
+const bgColor = ref("#1b253b");
 
 const gradients = ref([
   {
@@ -18,9 +18,14 @@ const gradients = ref([
     hidden: false,
     keypoints: [
       {
-        xPosition: 100,
-        yPosition: 20,
-        time: 100,
+        xPosition: 15,
+        yPosition: 15,
+        time: 25,
+      },
+      {
+        xPosition: 80,
+        yPosition: 15,
+        time: 50,
       },
     ],
   },
@@ -33,9 +38,14 @@ const gradients = ref([
     hidden: false,
     keypoints: [
       {
-        xPosition: 0,
-        yPosition: 100,
-        time: 48,
+        xPosition: 85,
+        yPosition: 80,
+        time: 25,
+      },
+      {
+        xPosition: 15,
+        yPosition: 85,
+        time: 50,
       },
     ],
   },
@@ -47,7 +57,7 @@ const animationTime = ref(2);
 const animationTimeCss = computed(() => {
   return animationTime.value + "s";
 });
-const animationEasing = ref("ease-in-out");
+const animationEasing = ref("ease-in");
 const screenSize = ref("normal");
 
 const animationsEnabledGlobally = ref(false);
@@ -488,19 +498,19 @@ html {
   animation-name: hero;
   animation-iteration-count: infinite;
   animation-duration: 6s;
-  transition-timing-function: ease-in-out;
+  transition-timing-function: ease-in;
 }
 
 @property --hero-1-x-position {
   syntax: "<percentage>";
   inherits: false;
-  initial-value: 11.406250000000002%;
+  initial-value: 10%;
 }
 
 @property --hero-1-y-position {
   syntax: "<percentage>";
   inherits: false;
-  initial-value: 87.421875%;
+  initial-value: 85%;
 }
 
 @property --hero-2-x-position {
@@ -517,16 +527,16 @@ html {
 
 @keyframes hero {
   25% {
-    --hero-1-x-position: 16.718750000000004%;
-    --hero-1-y-position: 16.2890625%;
-    --hero-2-x-position: 86.1328125%;
-    --hero-2-y-position: 83.3984375%;
+    --hero-1-x-position: 15%;
+    --hero-1-y-position: 15%;
+    --hero-2-x-position: 85%;
+    --hero-2-y-position: 80%;
   }
   50% {
-    --hero-1-x-position: 83.3984375%;
-    --hero-1-y-position: 15.117187500000002%;
-    --hero-2-x-position: 16.718750000000004%;
-    --hero-2-y-position: 84.6484375%;
+    --hero-1-x-position: 80%;
+    --hero-1-y-position: 15%;
+    --hero-2-x-position: 15%;
+    --hero-2-y-position: 85%;
   }
 }
 
