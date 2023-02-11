@@ -4,6 +4,7 @@ import GradientCanvas from "./components/GradientCanvas.vue";
 import GradientSettings from "./components/GradientSettings.vue";
 import AnimationSettings from "./components/AnimationSettings.vue";
 import CSSModal from "./components/CSSModal.vue";
+import GradientLibrary from "./components/GradientLibrary.vue";
 
 const bgColor = ref("#2f1d49");
 
@@ -318,63 +319,77 @@ function editKeypoint(obj) {
   >
     <div class="flex items-center">
       <img src="https://via.placeholder.com/66x66" alt="Gradient Tool" />
-      <p class="ml-4">Gradient Tool</p>
+      <p class="ml-6 text-2xl">Gradient Tool</p>
     </div>
     <div class="flex items-center">
-      <p class="text-gray-600 mr-4 cursor-pointer">Explore</p>
-      <button
-        class="bg-cyan-400 hover:bg-cyan-500 text-white px-2 py-3 rounded-md"
-      >
-        <p class="font-bold">Create Gradients</p>
-      </button>
+      <p class="text-gray-600 mr-8 cursor-pointer">
+        <a href="#explore"> Explore </a>
+      </p>
+      <a href="#creator">
+        <button
+          class="
+            bg-gradient-to-tr
+            btn
+            text-white
+            hover:shadow
+            px-2
+            py-3
+            rounded-lg
+          "
+        >
+          <p class="font-bold">Create Gradients</p>
+        </button>
+      </a>
     </div>
   </header>
-  <main
-    class="grid place-items-center"
-    id="gradient"
-    :style="cssString()"
-    style="height: 40vh"
-  >
-    <div class="font-bold text-white">
+  <main class="grid place-items-center" id="gradient-hero" style="height: 40vh">
+    <div class="font-black text-white">
       <h1 class="text-4xl">Gradients play a big part in modern web design.</h1>
       <h2 class="text-5xl mt-4">
         Create and animate them using
-        <span class="text-cyan-400">Gradient Tool</span>
+        <span class="text-transparent bg-clip-text bg-gradient-to-tl btn"
+          >Gradient Tool</span
+        >
       </h2>
       <div>
-        <button
-          class="
-            font-bold
-            px-5
-            py-2
-            rounded-md
-            mr-10
-            mt-10
-            hover:shadow-md
-            bg-cyan-400
-          "
-        >
-          <p>Start Creating</p>
-        </button>
-        <button
-          class="
-            font-bold
-            border-2 border-cyan-400
-            px-5
-            py-2
-            rounded-md
-            hover:shadow-md
-          "
-        >
-          <p>Explore</p>
-        </button>
+        <a href="#creator">
+          <button
+            class="
+              font-bold
+              px-5
+              py-2
+              rounded-lg
+              mr-10
+              mt-10
+              hover:shadow
+              bg-gradient-to-tr
+              btn
+            "
+          >
+            <p>Start Creating</p>
+          </button>
+        </a>
+        <a href="#explore">
+          <button
+            class="font-bold border-2 px-5 py-2 rounded-lg hover:shadow-md"
+          >
+            <p>Explore</p>
+          </button>
+        </a>
       </div>
     </div>
   </main>
   <div class="bg-white flex items-start">
     <main class="w-full mx-32">
+      <h1
+        class="mt-20 text-left font-bold text-4xl"
+        :class="[screenSize === 'large' ? 'mb-12' : '']"
+        id="creator"
+      >
+        Gradient creator
+      </h1>
       <div
-        class="w-full flex flex-wrap justify-around items-center mt-20"
+        class="w-full flex flex-wrap justify-around items-center"
         :class="[screenSize === 'large' ? 'flex-col' : 'flex-row']"
       >
         <GradientCanvas
@@ -411,7 +426,7 @@ function editKeypoint(obj) {
       </div>
       <div class="mt-8 mr-16 py-4 flex items-center justify-end">
         <select
-          class="bg-slate-700 text-white py-2 px-4 font-bold rounded-md"
+          class="bg-gray-700 text-white py-2 px-4 font-bold rounded-lg"
           v-model="screenSize"
         >
           <option value="normal">Normal</option>
@@ -426,17 +441,29 @@ function editKeypoint(obj) {
           :animation-easing="animationEasing"
         />
       </div>
+      <h1 class="mt-20 text-left font-bold text-4xl" id="explore">
+        Pre-made Gradients
+      </h1>
+      <GradientLibrary class="mt-12" />
     </main>
   </div>
 </template>
 
 <style>
+html {
+  scroll-behavior: smooth;
+}
+
 #app {
   font-family: "Inter", "Avenir", "Helvetica", "Arial", "sans-serif";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: rgb(51 65 85);
+}
+
+.btn {
+  @apply from-lime-200 to-cyan-400;
 }
 
 #gradient {
@@ -444,6 +471,63 @@ function editKeypoint(obj) {
   animation-iteration-count: infinite;
   animation-duration: v-bind(animationTimeCss);
   transition-timing-function: v-bind(animationEasing);
+}
+
+#gradient-hero {
+  background: radial-gradient(
+      100% 100% at var(--hero-1-x-position) var(--hero-1-y-position),
+      #3cddb4 0%,
+      transparent
+    ),
+    radial-gradient(
+      100% 100% at var(--hero-2-x-position) var(--hero-2-y-position),
+      #2773ec 0%,
+      transparent
+    ),
+    #2b2a41;
+  animation-name: hero;
+  animation-iteration-count: infinite;
+  animation-duration: 6s;
+  transition-timing-function: ease-in-out;
+}
+
+@property --hero-1-x-position {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 11.406250000000002%;
+}
+
+@property --hero-1-y-position {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 87.421875%;
+}
+
+@property --hero-2-x-position {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 80%;
+}
+
+@property --hero-2-y-position {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 20%;
+}
+
+@keyframes hero {
+  25% {
+    --hero-1-x-position: 16.718750000000004%;
+    --hero-1-y-position: 16.2890625%;
+    --hero-2-x-position: 86.1328125%;
+    --hero-2-y-position: 83.3984375%;
+  }
+  50% {
+    --hero-1-x-position: 83.3984375%;
+    --hero-1-y-position: 15.117187500000002%;
+    --hero-2-x-position: 16.718750000000004%;
+    --hero-2-y-position: 84.6484375%;
+  }
 }
 
 .noselect {

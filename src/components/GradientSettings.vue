@@ -91,7 +91,7 @@ function onDrop(dropResult) {
       px-8
       py-4
       h-[36rem]
-      rounded-md
+      rounded-xl
       bg-gray-700
       text-white
       overflow-auto
@@ -111,24 +111,24 @@ function onDrop(dropResult) {
             class="
               column-drag-handle
               cursor-pointer
-              bg-slate-900
+              bg-gray-900
               p-6
               rounded-l-md
               text-xl
             "
             >&#x2630;</span
           >
-          <div class="flex bg-slate-800 rounded-r-md pr-4">
+          <div class="flex bg-gray-800 rounded-r-md pr-4">
             <div class="flex">
               <div class="flex">
                 <img
-                  class="w-6 mx-4 cursor-pointer"
+                  class="w-5 mx-4 cursor-pointer"
                   @click="removeGradient(gradient.id)"
                   :src="trash"
                   alt="remove"
                 />
                 <img
-                  class="w-6 cursor-pointer"
+                  class="w-5 cursor-pointer"
                   @click="hideGradient(gradient.id)"
                   :src="gradient.hidden ? eye : eyeSlash"
                   alt="hide"
@@ -156,7 +156,7 @@ function onDrop(dropResult) {
         </div>
       </Draggable>
       <div class="flex flex-col items-center py-2">
-        <div class="flex flex-col bg-slate-800 w-full rounded-md py-2">
+        <div class="flex flex-col bg-gray-800 w-full rounded-xl py-2">
           <p class="font-light mb-2">Background Color</p>
           <div class="w-full flex justify-center items-center">
             <input
@@ -171,7 +171,7 @@ function onDrop(dropResult) {
         </div>
         <div class="w-full mt-4 flex justify-center">
           <button
-            class="py-2 bg-cyan-400 w-1/2 rounded-md"
+            class="py-2 btn bg-gradient-to-tr w-1/3 rounded-lg"
             @click="createGradient"
           >
             Add

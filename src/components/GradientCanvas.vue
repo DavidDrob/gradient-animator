@@ -89,13 +89,13 @@ const screenOptions = computed(() => {
 </script>
 
 <template>
-  <div class="rounded-md" id="gradient" :style="cssString">
+  <div class="rounded-xl" id="gradient" :style="cssString">
     <div
       class="
         -m-6
         bg-transparent
         border-2 border-dashed border-gray-500/50
-        rounded-md
+        rounded-xl
       "
       :style="screenOptions"
       id="canvas"

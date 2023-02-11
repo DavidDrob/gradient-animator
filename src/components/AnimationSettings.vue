@@ -121,14 +121,14 @@ const openGradient = computed(() => {
 </script>
 
 <template>
-  <div class="bg-slate-900 rounded-md">
+  <div class="bg-gray-900 rounded-xl">
     <div
       class="
         w-full
         px-8
         py-4
         h-[36rem]
-        rounded-md
+        rounded-xl
         bg-gray-700
         text-white
         overflow-auto
@@ -139,17 +139,19 @@ const openGradient = computed(() => {
       <!-- <p class="text-red-500">
             Experimental feature - doesn't work in Safari, Firefox
           </p> -->
-      <div class="flex justify-around">
-        <input
-          class="h-4 w-4 border-none rounded-md my-1 cursor-pointer"
-          type="checkbox"
-          v-model="animationToggled"
-        />
-        <p class="-ml-4 font-light">Animations Enabled</p>
+      <div class="flex justify-center items-center w-full mb-2">
+        <div class="w-fit flex">
+          <p class="mr-4 font-light">Animations Enabled</p>
+          <input
+            class="h-4 w-4 border-none rounded-xl my-1 cursor-pointer"
+            type="checkbox"
+            v-model="animationToggled"
+          />
+        </div>
       </div>
       <div>
         <div
-          class="my-2 bg-slate-800 rounded-md"
+          class="my-2 bg-gray-800 rounded-xl"
           v-for="gradient in gradients"
           :key="gradient.id"
         >
@@ -159,7 +161,7 @@ const openGradient = computed(() => {
                 ? (gradientSelected = false)
                 : (gradientSelected = gradient.id)
             "
-            class="flex p-4 w-full rounded-md cursor-pointer"
+            class="flex p-4 w-full rounded-xl cursor-pointer"
           >
             <div
               class="w-6 h-6 rounded-md mr-24"
@@ -180,18 +182,26 @@ const openGradient = computed(() => {
             <div
               v-for="(keypoint, index) in openGradient.keypoints"
               :key="index"
-              class="mb-6 bg-slate-700 py-4 mx-4 rounded-md"
+              class="mb-6 bg-gray-900 py-4 mx-4 rounded-xl"
             >
               <div class="flex items-center justify-between mx-4">
                 <img
-                  class="w-6 mr-4 cursor-pointer"
+                  class="w-5 cursor-pointer"
                   @click="removeKeypoint(openGradient, index)"
                   :src="trash"
                   alt="remove"
                 />
                 <input
                   type="number"
-                  class="bg-slate-700 pl-1 font-light rounded-sm"
+                  class="
+                    bg-gray-900
+                    pl-1
+                    ml-2
+                    text-sm
+                    font-light
+                    rounded-sm
+                    w-12
+                  "
                   v-model="keypoint.time"
                   @change="changeTime(gradientSelected)"
                   min="1"
@@ -199,7 +209,7 @@ const openGradient = computed(() => {
                 />
 
                 <div
-                  class="cursor-pointer font-light"
+                  class="cursor-pointer text-sm font-light w-full text-right"
                   @click="changePosition(openGradient, index)"
                 >
                   {{ ctaMessage(openGradient, index) }}
@@ -207,18 +217,18 @@ const openGradient = computed(() => {
               </div>
             </div>
             <button
-              class="py-2 mb-4 bg-cyan-400 w-1/2 rounded-md"
+              class="py-2 mb-4 btn bg-gradient-to-tr w-1/2 rounded-lg"
               @click="createKeypoint(gradientSelected)"
             >
               Add Keypoint
             </button>
           </div>
         </div>
-        <div class="my-2 p-4 flex justify-between bg-slate-800 rounded-md">
+        <div class="my-2 p-4 flex justify-between bg-gray-800 rounded-xl">
           <div class="flex flex-col">
             <p class="font-semibold">Duration</p>
             <input
-              class="bg-slate-700 w-12 pl-2 mt-2 font-light rounded-md"
+              class="bg-gray-900 w-12 pl-2 mt-2 font-light rounded-lg"
               v-model="animationTime"
               type="number"
             />
@@ -226,7 +236,7 @@ const openGradient = computed(() => {
           <div class="flex flex-col ml-8">
             <p class="font-semibold text-left">Easing</p>
             <select
-              class="bg-slate-700 px-2 py-1 w-full mt-2 font-light rounded-md"
+              class="bg-gray-900 px-2 py-1 w-full mt-2 font-light rounded-lg"
               v-model="animationEasing"
             >
               <option class="font-light" value="ease-in-out">

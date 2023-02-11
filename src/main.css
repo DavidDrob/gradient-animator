@@ -28,5 +28,10 @@
         font-weight: 700;
         src: url(./assets/fonts/Inter-Bold.ttf);
     }
+    @font-face {
+        font-family: 'Inter';
+        font-weight: 900;
+        src: url(./assets/fonts/Inter-Black.ttf);
+    }
 
   }

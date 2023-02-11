@@ -35,10 +35,11 @@ const animationToggled = computed({
       font-bold
       px-5
       py-2
-      rounded-md
+      rounded-xl
       ml-10
       hover:shadow-md
-      bg-cyan-400
+      bg-gradient-to-bl
+      btn
       text-white
     "
     @click="modalOpen = true"
@@ -62,7 +63,7 @@ const animationToggled = computed({
     :class="[modalOpen ? 'grid place-items-center' : 'hidden']"
   >
     <div class="w-full h-auto max-w-4xl">
-      <div class="bg-white rounded-md shadow">
+      <div class="bg-white rounded-xl shadow">
         <p class="text-xl font-bold pt-4 text-gray-800">
           Copy the following CSS
         </p>
@@ -99,7 +100,7 @@ const animationToggled = computed({
           </code>
           <div>
             <div
-              class="h-72 w-56 mb-2 rounded-md noselect"
+              class="h-72 w-56 mb-2 rounded-xl noselect"
               :style="cssString"
               :id="animationToggled ? 'gradient' : ''"
             >
@@ -121,9 +122,10 @@ const animationToggled = computed({
               font-bold
               px-5
               py-2
-              rounded-md
+              rounded-lg
               hover:shadow-md
-              bg-cyan-400
+              btn
+              bg-gradient-to-tr
               text-white
             "
             @click="copyCSS"
@@ -135,9 +137,10 @@ const animationToggled = computed({
               font-bold
               px-5
               py-2
-              rounded-md
+              rounded-lg
               hover:shadow-md
-              bg-cyan-400
+              btn
+              bg-gradient-to-bl
               text-white
             "
             @click="modalOpen = false"
