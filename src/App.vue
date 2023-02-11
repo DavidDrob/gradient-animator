@@ -318,7 +318,7 @@ function editKeypoint(obj) {
     style="height: 10vh"
   >
     <div class="flex items-center">
-      <img src="https://via.placeholder.com/66x66" alt="Gradient Tool" />
+      <img class="w-16 h-16" src="./assets/logo.svg" alt="Gradient Tool" />
       <p class="ml-6 text-2xl">Gradient Tool</p>
     </div>
     <div class="flex items-center">
