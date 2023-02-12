@@ -22,7 +22,8 @@ function removeGradient(index) {
   const gradient = props.gradients.findIndex(
     (gradient) => gradient.id == index
   );
-  if (props.gradients.length) emit("update-max-id", index + 1); // to avoid same ID error
+  if (props.gradients.length)
+    emit("update-max-id", index + props.gradients.length); // to avoid same ID error
 
   props.gradients.splice(gradient, 1);
   emit("change-gradient", props.gradients);
@@ -34,16 +35,15 @@ function hideGradient(index) {
     (gradient) => gradient.id == index
   );
 
+  if (props.gradients[gradient].hidden) emit("disable-animation");
+
   props.gradients[gradient].hidden = !props.gradients[gradient].hidden;
   emit("change-gradient", props.gradients);
-  // emit("disable-animation");
 }
 
 function createGradient() {
-  const maxId = Math.max(...props.gradients.map((o) => o.id));
-
   props.gradients.push({
-    id: Number.isInteger(maxId) ? maxId + 2 : props.maxIdGlobal,
+    id: props.maxIdGlobal,
     color: "#23d726",
     xPosition: 80,
     yPosition: 80,
@@ -51,13 +51,14 @@ function createGradient() {
     hidden: false,
     keypoints: [
       {
-        xPosition: 100,
+        xPosition: 20,
         yPosition: 20,
-        time: 90,
+        time: 50,
       },
     ],
   });
 
+  emit("update-max-id", props.maxIdGlobal + 1);
   emit("disable-animation");
 }
 

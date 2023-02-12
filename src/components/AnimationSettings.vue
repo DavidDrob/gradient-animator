@@ -78,9 +78,9 @@ function createKeypoint(id) {
       .time;
   const gradient = props.gradients.find((g) => g.id === id);
   gradient.keypoints.push({
-    xPosition: 80,
-    yPosition: 20,
-    time: 90,
+    xPosition: 100,
+    yPosition: 100,
+    time: 25,
   });
   gradient.keypoints.sort((a, b) => {
     return a.time - b.time;
@@ -88,6 +88,8 @@ function createKeypoint(id) {
   props.editingKeypoint.keypoint = gradient.keypoints.findIndex(
     (k) => k.time === oldKeypoint
   );
+
+  emit("update-animation", gradientSelected.value);
 }
 
 function changePosition(gradient, keypointId) {

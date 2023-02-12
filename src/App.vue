@@ -62,7 +62,7 @@ const screenSize = ref("normal");
 
 const animationsEnabledGlobally = ref(false);
 const openKeypoint = ref(false);
-const maxIdGlobal = ref(1);
+const highestId = ref(4);
 
 watch(animationsEnabledGlobally, async (newValue, oldValue) => {
   // restart animation on toggle
@@ -92,7 +92,7 @@ function removeGradient(index) {
   const gradient = gradients.value.findIndex(
     (gradient) => gradient.id == index
   );
-  if (gradients.value.length) maxIdGlobal.value = index + 1; // to avoid same ID error
+  if (gradients.value.length) highestId.value = index + 1; // to avoid same ID error
   gradients.value.splice(gradient, 1);
 }
 
@@ -119,8 +119,6 @@ function createCSS(id, x, y, color, strength, animationsEnabled) {
       : `${parseInt(x)}% ${parseInt(y)}%`
   }, ${color} ${strength}%, transparent),`;
 }
-
-const highestId = ref(3);
 
 // A CSS property can not be updated or re-registered in JS
 // that means a new property with a new ID has to be created
@@ -416,8 +414,8 @@ function editKeypoint(obj) {
             class="mr-12"
             :gradients="gradients"
             @change-gradient="changeGradient"
-            :max-id-global="maxIdGlobal"
-            @update-max-id="(newId) => (maxIdGlobal = newId)"
+            :max-id-global="highestId"
+            @update-max-id="(newId) => (highestId = newId)"
             @disable-animation="animationsEnabledGlobally = false"
             v-model:bg-color="bgColor"
           />
