@@ -440,14 +440,17 @@ function editKeypoint(obj) {
           <option value="normal">Normal</option>
           <option value="large">Large</option>
         </select>
-        <CSSModal
-          :css-string="cssString()"
-          v-model:animations-enabled="animationsEnabledGlobally"
-          :properties="properties"
-          :animation-css-string="animationCSSString"
-          :animation-duration="animationTimeCss"
-          :animation-easing="animationEasing"
-        />
+        <div class="ml-10">
+          <CSSModal
+            :css-string="cssString()"
+            animation-name="gradient"
+            v-model:animations-enabled="animationsEnabledGlobally"
+            :properties="properties"
+            :animation-css-string="animationCSSString"
+            :animation-duration="animationTimeCss"
+            :animation-easing="animationEasing"
+          />
+        </div>
       </div>
       <h1 class="mt-20 text-left font-bold text-4xl" id="explore">
         Pre-made Gradients
@@ -458,6 +461,13 @@ function editKeypoint(obj) {
 </template>
 
 <style>
+:root {
+  --hero-1-x-position: 10%;
+  --hero-1-y-position: 85%;
+  --hero-2-x-position: 80%;
+  --hero-2-y-position: 20%;
+}
+
 html {
   scroll-behavior: smooth;
 }

@@ -8,6 +8,7 @@ const props = defineProps({
   animationsEnabled: Boolean,
   animationDuration: String,
   animationEasing: String,
+  animationName: String,
 });
 
 const emit = defineEmits(["update:animationsEnabled"]);
@@ -36,7 +37,6 @@ const animationToggled = computed({
       px-5
       py-2
       rounded-xl
-      ml-10
       hover:shadow-md
       bg-gradient-to-bl
       btn
@@ -67,8 +67,9 @@ const animationToggled = computed({
         <p class="text-xl font-bold pt-4 text-gray-800">
           Copy the following CSS
         </p>
-        <p class="text-lg font-light text-yellow-400/80">
-          As of right now the animations don't work in Safari and Firefox
+        <p class="text-lg font-light text-yellow-600">
+          As of right now the animations feature don't work in Safari and
+          Firefox
         </p>
         <div class="flex items-baseline justify-between px-6 space-y-6">
           <code
@@ -80,7 +81,8 @@ const animationToggled = computed({
               <div class="pl-3">
                 {{ cssString }} <br />
                 <div v-if="animationToggled">
-                  animation-name: main; <br />
+                  animation-name: {{ animationName ? animationName : "main" }};
+                  <br />
                   animation-iteration-count: infinite; <br />
                   animation-duration: {{ animationDuration }}; <br />
                   transition-timing-function: {{ animationEasing }} <br />
@@ -105,11 +107,11 @@ const animationToggled = computed({
             <div
               class="h-72 w-56 mb-2 rounded-xl noselect"
               :style="cssString"
-              :id="animationToggled ? 'gradient' : ''"
+              :id="animationToggled ? animationName : ''"
             >
               &nbsp;
             </div>
-            <div>
+            <div v-if="animationName === 'gradient'">
               <span> Animations: </span>
               <input
                 class="h-4 w-4 border-none rounded-md my-1 cursor-pointer"
