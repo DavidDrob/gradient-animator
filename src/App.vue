@@ -53,6 +53,7 @@ const gradients = ref([
 
 const animationCSSString = ref("");
 const properties = ref([]);
+const rootVariables = ref([]);
 const animationTime = ref(2);
 const animationTimeCss = computed(() => {
   return animationTime.value + "s";
@@ -158,21 +159,17 @@ function changeAnimations(id) {
     if (index > -1) properties.value.splice(index, 1);
   });
 
-  window.CSS.registerProperty({
-    name: `--${newGradient.id}-x-position`,
-    syntax: "<percentage>",
-    inherits: false,
-    initialValue: newGradient.xPosition + "%",
-  });
-
-  window.CSS.registerProperty({
-    name: `--${newGradient.id}-y-position`,
-    syntax: "<percentage>",
-    inherits: false,
-    initialValue: newGradient.yPosition + "%",
-  });
-
   if (!newGradient.hidden) {
+    rootVariables.value.push({
+      key: `--${newGradient.id}-x-position`,
+      value: `${newGradient.xPosition}%`,
+    });
+
+    rootVariables.value.push({
+      key: `--${newGradient.id}-y-position`,
+      value: `${newGradient.yPosition}%`,
+    });
+
     properties.value.push(`@property --${newGradient.id}-x-position {
       syntax: '<percentage>';
         inherits: false;
@@ -193,6 +190,20 @@ function changeAnimations(id) {
       newGradient.yPosition + "%"
     );
   }
+
+  window.CSS.registerProperty({
+    name: `--${newGradient.id}-x-position`,
+    syntax: "<percentage>",
+    inherits: false,
+    initialValue: newGradient.xPosition + "%",
+  });
+
+  window.CSS.registerProperty({
+    name: `--${newGradient.id}-y-position`,
+    syntax: "<percentage>",
+    inherits: false,
+    initialValue: newGradient.yPosition + "%",
+  });
 
   const createStatements = (id, x, y) =>
     `--${id}-x-position: ${x}%;--${id}-y-position: ${y}%;`;
@@ -446,6 +457,7 @@ function editKeypoint(obj) {
             animation-name="gradient"
             v-model:animations-enabled="animationsEnabledGlobally"
             :properties="properties"
+            :root-variables="rootVariables"
             :animation-css-string="animationCSSString"
             :animation-duration="animationTimeCss"
             :animation-easing="animationEasing"

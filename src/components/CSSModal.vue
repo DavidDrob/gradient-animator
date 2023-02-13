@@ -4,6 +4,7 @@ import { ref, computed } from "vue";
 const props = defineProps({
   cssString: String,
   properties: Array,
+  rootVariables: Array,
   animationCssString: String,
   animationsEnabled: Boolean,
   animationDuration: String,
@@ -16,7 +17,30 @@ const emit = defineEmits(["update:animationsEnabled"]);
 const modalOpen = ref(false);
 
 function copyCSS() {
-  let text = document.querySelector("#cssCode").textContent;
+  let text = ".your-element {";
+
+  if (props.animationsEnabled) {
+    text += props.cssString;
+    text += "animation-name: " + props.animationName + "; ";
+    text += "animation-iteration-count: infinite; ";
+    text += "animation-duration: " + props.animationDuration + "; ";
+    text += "transition-timing-function: " + props.animationEasing + ";}";
+
+    props.properties.forEach((property) => {
+      text += property;
+    });
+
+    text += ":root {";
+    props.rootVariables.forEach((variable) => {
+      text += `${variable.key}: ${variable.value};`;
+    });
+    text += "}";
+
+    text += props.animationCssString;
+  } else {
+    text = document.querySelector("#cssCode").textContent;
+  }
+
   navigator.clipboard.writeText(text);
 }
 
@@ -91,12 +115,17 @@ const animationToggled = computed({
 
               }
             </div>
-            <p></p>
             <div v-if="animationToggled">
               <br />
               <p v-for="property in properties" :key="property">
                 {{ property }}
               </p>
+              <br />
+              <p>:root {</p>
+              <p class="pl-3" v-for="variable in rootVariables" :key="variable">
+                {{ variable.key }}: {{ variable.value }}
+              </p>
+              <p>}</p>
               <br />
               <p>
                 {{ animationCssString }}
