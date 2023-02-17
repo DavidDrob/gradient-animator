@@ -89,8 +89,8 @@ function onDrop(dropResult) {
 <template>
   <div
     class="
-      px-8
-      py-4
+      p-4
+      md:px-8
       h-[36rem]
       rounded-xl
       bg-gray-700
@@ -99,7 +99,7 @@ function onDrop(dropResult) {
       flex flex-col flex-nowrap
     "
   >
-    <p class="text-2xl font-semibold mb-4">Gradient Settings</p>
+    <p class="text-2xl text-center font-semibold mb-4">Gradient Settings</p>
     <Container
       @drop="onDrop"
       drag-class="opacity-ghost"
@@ -113,17 +113,19 @@ function onDrop(dropResult) {
               column-drag-handle
               cursor-pointer
               bg-gray-900
-              p-6
+              py-9
+              px-5
+              md:py-7 md:px-6
               rounded-l-md
               text-xl
             "
             >&#x2630;</span
           >
-          <div class="flex bg-gray-800 w-full rounded-r-md pr-4">
-            <div class="flex">
-              <div class="flex">
+          <div class="flex bg-gray-800 w-full rounded-r-md px-4">
+            <div class="flex justify-around w-full">
+              <div class="flex my-4 md:my-0 md:mx-4 md:ml-0">
                 <img
-                  class="w-5 mx-4 cursor-pointer"
+                  class="w-5 mr-4 cursor-pointer"
                   @click="removeGradient(gradient.id)"
                   :src="trash"
                   alt="remove"
@@ -135,30 +137,32 @@ function onDrop(dropResult) {
                   alt="hide"
                 />
               </div>
-              <div class="grid place-items-center py-2 mx-8 w-20">
-                <input
-                  class="w-8 h-8 mb-1 bg-transparent"
-                  id="color"
-                  type="color"
-                  v-model="gradient.color"
-                />
-                <h1 class="font-thin">{{ gradient.color.toUpperCase() }}</h1>
+              <div class="py-2 md:py-3 flex flex-col md:flex-row">
+                <div class="grid place-items-center pb-2 md:pb-0">
+                  <input
+                    class="w-8 h-8 mb-1 bg-transparent"
+                    id="color"
+                    type="color"
+                    v-model="gradient.color"
+                  />
+                  <h1 class="font-thin">{{ gradient.color.toUpperCase() }}</h1>
+                </div>
+                <div class="flex flex-col justify-center">
+                  <input
+                    type="range"
+                    :min="-100"
+                    :max="75"
+                    v-model="gradient.strength"
+                  />
+                </div>
               </div>
-            </div>
-            <div class="flex flex-col justify-center">
-              <input
-                type="range"
-                :min="-100"
-                :max="75"
-                v-model="gradient.strength"
-              />
             </div>
           </div>
         </div>
       </Draggable>
       <div class="flex flex-col items-center py-2">
         <div class="flex flex-col bg-gray-800 w-full rounded-xl py-2">
-          <p class="font-light mb-2">Background Color</p>
+          <p class="font-light text-center mb-2">Background Color</p>
           <div class="w-full flex justify-center items-center">
             <input
               class="mr-4 w-8 h-8 bg-transparent"
@@ -172,7 +176,7 @@ function onDrop(dropResult) {
         </div>
         <div class="w-full mt-4 flex justify-center">
           <button
-            class="py-2 btn bg-gradient-to-tr w-1/3 rounded-lg"
+            class="py-2 bg-cyan-400 w-1/3 rounded-lg"
             @click="createGradient"
           >
             Add

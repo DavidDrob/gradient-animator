@@ -31,7 +31,7 @@ const gradients = ref([
   },
   {
     id: 1,
-    color: "#987aF1",
+    color: "#00FAA7",
     xPosition: 80,
     yPosition: 20,
     strength: 0,
@@ -333,12 +333,12 @@ function editKeypoint(obj) {
 
 <template>
   <header
-    class="bg-white w-5/6 m-auto flex justify-between font-bold"
+    class="w-11/12 m-auto flex items-center justify-between font-bold"
     style="height: 10vh"
   >
     <div class="flex items-center">
-      <img class="w-16 h-16" src="./assets/logo.svg" alt="Gradient Tool" />
-      <p class="ml-6 text-2xl">Gradient Tool</p>
+      <img class="w-16 h-16" src="./assets/logo.svg" alt="Gradient Animator" />
+      <p class="ml-6 text-2xl hidden md:inline">Gradient Animator</p>
     </div>
     <div class="flex items-center">
       <p class="text-gray-600 mr-8 cursor-pointer">
@@ -346,21 +346,14 @@ function editKeypoint(obj) {
       </p>
       <a href="#creator">
         <button
-          class="
-            bg-gradient-to-tr
-            btn
-            text-white
-            hover:shadow
-            px-2
-            py-3
-            rounded-lg
-          "
+          class="text-white bg-cyan-400 hover:shadow px-2 py-3 rounded-lg"
         >
           <p class="font-bold">Create Gradients</p>
         </button>
       </a>
     </div>
   </header>
+  <!--
   <main class="grid place-items-center" id="gradient-hero" style="height: 40vh">
     <div class="font-black text-white">
       <h1 class="text-4xl">Gradients play a big part in modern web design.</h1>
@@ -397,11 +390,11 @@ function editKeypoint(obj) {
         </a>
       </div>
     </div>
-  </main>
-  <div class="bg-white flex items-start">
-    <main class="w-full mx-32">
+  </main>-->
+  <div class="bg-white w-full flex items-start">
+    <main class="w-5/6 m-auto md:mx-32">
       <h1
-        class="mt-20 text-left font-bold text-4xl"
+        class="my-8 md:mb-0 md:mt-20 text-left font-bold text-4xl"
         :class="[screenSize === 'large' ? 'mb-12' : '']"
         id="creator"
       >
@@ -412,6 +405,7 @@ function editKeypoint(obj) {
         :class="[screenSize === 'large' ? 'flex-col' : 'flex-row']"
       >
         <GradientCanvas
+          class="md:mt-12"
           :screen-size="screenSize"
           :gradients="gradients"
           :css-string="cssString()"
@@ -419,10 +413,27 @@ function editKeypoint(obj) {
           @move-point="updateGradient"
           @move-keypoint="updateKeypoint"
         />
+        <select
+          class="
+            bg-gray-700
+            text-white
+            mt-8
+            py-2
+            px-4
+            font-bold
+            rounded-lg
+            inline
+            md:hidden
+          "
+          v-model="screenSize"
+        >
+          <option value="normal">Normal View</option>
+          <option value="large">Large View</option>
+        </select>
 
-        <div class="flex mt-12">
+        <div class="flex flex-col md:flex-row mt-12">
           <GradientSettings
-            class="mr-12"
+            class="mb-12 md:mr-12 md:mb-0"
             :gradients="gradients"
             @change-gradient="changeGradient"
             :max-id-global="highestId"
@@ -443,13 +454,22 @@ function editKeypoint(obj) {
           />
         </div>
       </div>
-      <div class="mt-8 mr-16 py-4 flex items-center justify-end">
+      <div class="mt-8 mr-4 md:mr-16 py-4 flex items-center justify-end">
         <select
-          class="bg-gray-700 text-white py-2 px-4 font-bold rounded-lg"
+          class="
+            bg-gray-700
+            text-white
+            py-2
+            px-4
+            font-bold
+            rounded-lg
+            hidden
+            md:inline
+          "
           v-model="screenSize"
         >
-          <option value="normal">Normal</option>
-          <option value="large">Large</option>
+          <option value="normal">Normal View</option>
+          <option value="large">Large View</option>
         </select>
         <div class="ml-10">
           <CSSModal
@@ -464,7 +484,7 @@ function editKeypoint(obj) {
           />
         </div>
       </div>
-      <h1 class="mt-20 text-left font-bold text-4xl" id="explore">
+      <h1 class="mt-20 text-left font-bold text-3xl md:text-4xl" id="explore">
         Pre-made Gradients
       </h1>
       <GradientLibrary class="mt-12" />
@@ -486,9 +506,6 @@ html {
 
 #app {
   font-family: "Inter", "Avenir", "Helvetica", "Arial", "sans-serif";
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: rgb(51 65 85);
 }
 

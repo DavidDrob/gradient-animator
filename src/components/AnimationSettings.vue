@@ -137,7 +137,7 @@ const openGradient = computed(() => {
         flex flex-col flex-nowrap
       "
     >
-      <p class="text-2xl font-semibold mb-4">Animation Settings</p>
+      <p class="text-2xl text-center font-semibold mb-4">Animation Settings</p>
       <div class="flex justify-center items-center w-full mb-2">
         <div class="w-fit flex">
           <p class="mr-4 font-light">Animations Enabled</p>
@@ -160,13 +160,13 @@ const openGradient = computed(() => {
                 ? (gradientSelected = false)
                 : (gradientSelected = gradient.id)
             "
-            class="flex p-4 w-full rounded-xl cursor-pointer"
+            class="flex p-4 items-center w-full rounded-xl cursor-pointer"
           >
             <div
-              class="w-6 h-6 rounded-md mr-24"
+              class="w-8 h-8 md:w-6 md:h-6 rounded-md"
               :style="'background-color:' + gradient.color"
             ></div>
-            <div class="flex items-center">
+            <div class="flex items-center justify-end w-full">
               <img
                 class="h-5 w-5"
                 :src="
@@ -215,12 +215,14 @@ const openGradient = computed(() => {
                 </div>
               </div>
             </div>
-            <button
-              class="py-2 mb-4 btn bg-gradient-to-tr w-1/2 rounded-lg"
-              @click="createKeypoint(gradientSelected)"
-            >
-              Add Keypoint
-            </button>
+            <div class="grid place-items-center">
+              <button
+                class="py-2 mb-4 bg-cyan-400 w-1/2 rounded-lg"
+                @click="createKeypoint(gradientSelected)"
+              >
+                Add Keypoint
+              </button>
+            </div>
           </div>
         </div>
         <div class="my-2 p-4 flex justify-between bg-gray-800 rounded-xl">

@@ -59,16 +59,15 @@ const animationToggled = computed({
     class="
       font-bold
       px-5
-      py-2
+      py-3
       rounded-xl
       hover:shadow-md
-      bg-gradient-to-bl
-      btn
+      bg-gradient-to-bl bg-cyan-400
       text-white
     "
     @click="modalOpen = true"
   >
-    <p>Copy CSS</p>
+    Copy CSS
   </button>
 
   <div
@@ -82,22 +81,40 @@ const animationToggled = computed({
       p-4
       overflow-x-hidden overflow-y-auto
       bg-black/30
-      md:inset-0 md:h-full
+      md:inset-0
+      h-full
     "
     :class="[modalOpen ? 'grid place-items-center' : 'hidden']"
   >
     <div class="w-full h-auto max-w-4xl">
       <div class="bg-white rounded-xl shadow">
-        <p class="text-xl font-bold pt-4 text-gray-800">
+        <p class="text-lg md:text-xl font-bold pt-4 text-center text-gray-800">
           Copy the following CSS
         </p>
-        <p class="text-lg font-light text-yellow-600">
-          As of right now the animations feature don't work in Safari and
+        <p class="text-md md:text-lg font-light text-center text-yellow-600">
+          As of right now the animations feature doesn't work in Safari and
           Firefox
         </p>
-        <div class="flex items-baseline justify-between px-6 space-y-6">
+        <div
+          class="
+            flex flex-col-reverse
+            md:flex-row
+            items-center
+            md:items-baseline
+            justify-between
+            px-6
+            space-y-6
+          "
+        >
           <code
-            class="text-base text-left leading-relaxed text-gray-600 w-2/3 pr-4"
+            class="
+              text-base text-left
+              leading-relaxed
+              text-gray-600
+              w-10/12
+              md:w-2/3
+              pr-4
+            "
             id="cssCode"
           >
             <div>
@@ -140,8 +157,8 @@ const animationToggled = computed({
             >
               &nbsp;
             </div>
-            <div v-if="animationName === 'gradient'">
-              <span> Animations: </span>
+            <div class="text-center" v-if="animationName === 'gradient'">
+              <span> Animations </span>
               <input
                 class="h-4 w-4 border-none rounded-md my-1 cursor-pointer"
                 type="checkbox"
@@ -158,8 +175,7 @@ const animationToggled = computed({
               py-2
               rounded-lg
               hover:shadow-md
-              btn
-              bg-gradient-to-tr
+              bg-cyan-400
               text-white
             "
             @click="copyCSS"
@@ -173,8 +189,7 @@ const animationToggled = computed({
               py-2
               rounded-lg
               hover:shadow-md
-              btn
-              bg-gradient-to-bl
+              bg-cyan-400
               text-white
             "
             @click="modalOpen = false"

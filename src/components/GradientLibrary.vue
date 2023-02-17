@@ -122,7 +122,7 @@ const g6Animation =
 </script>
 
 <template>
-  <div class="flex flex-wrap justify-items-start -m-8">
+  <div class="flex flex-wrap justify-center md:justify-start -m-8">
     <div class="w-64 h-64 m-8 rounded-xl group" id="g-1">
       <div class="invisible group-hover:visible grid place-items-center h-full">
         <CSSModal

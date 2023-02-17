@@ -80,9 +80,20 @@ const gradientHandlers = computed(() => {
 });
 
 const screenOptions = computed(() => {
+  let desktopNormalMultiplier = 2;
+  let desktopLargeMultiplier = 3.5;
+  if (window.screen.width < 768) {
+    desktopNormalMultiplier = 1;
+    desktopLargeMultiplier = 1;
+  }
+
   const options = {
-    normal: "height: 32rem; width: 32rem",
-    large: "height: 50vh; width: 90vw",
+    normal: `height: ${16 * desktopNormalMultiplier}rem; width: ${
+      16 * desktopNormalMultiplier
+    }rem`,
+    large: `height: ${16 * desktopNormalMultiplier}rem; width: ${
+      22 * desktopLargeMultiplier
+    }rem`,
   };
   return options[props.screenSize];
 });
@@ -92,7 +103,8 @@ const screenOptions = computed(() => {
   <div class="rounded-xl" id="gradient" :style="cssString">
     <div
       class="
-        -m-6
+        -m-3
+        md:-m-6
         bg-transparent
         border-2 border-dashed border-gray-500/50
         rounded-xl
