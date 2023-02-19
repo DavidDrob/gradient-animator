@@ -338,12 +338,23 @@ function editKeypoint(obj) {
   >
     <div class="flex items-center">
       <img class="w-16 h-16" src="./assets/logo.svg" alt="Gradient Animator" />
-      <p class="ml-6 text-2xl hidden md:inline">Gradient Animator</p>
+      <p class="mx-6 text-2xl hidden md:inline">Gradient Animator</p>
+      <a
+        href="https://www.producthunt.com/posts/gradient-animator-2?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-gradient&#0045;animator&#0045;2"
+        target="_blank"
+        ><img
+          src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=380239&theme=light"
+          alt="Gradient&#0032;Animator - Create&#0032;and&#0032;animate&#0032;gradients&#0032;and&#0032;get&#0032;the&#0032;CSS&#0032;code&#0032;right&#0032;away | Product Hunt"
+          style="width: 160px; height: 40px"
+          width="160"
+          height="40"
+      /></a>
     </div>
     <div class="flex items-center">
       <p class="text-gray-600 mr-8 cursor-pointer">
         <a href="#explore"> Explore </a>
       </p>
+
       <a href="#creator">
         <button
           class="text-white bg-cyan-400 hover:shadow px-2 py-3 rounded-lg"
@@ -474,7 +485,7 @@ function editKeypoint(obj) {
         <div class="ml-10">
           <CSSModal
             :css-string="cssString()"
-            animation-name="gradient"
+            animation-name="main"
             v-model:animations-enabled="animationsEnabledGlobally"
             :properties="properties"
             :root-variables="rootVariables"
@@ -488,6 +499,16 @@ function editKeypoint(obj) {
         Pre-made Gradients
       </h1>
       <GradientLibrary class="mt-12" />
+      <footer class="grid place-items-center my-6">
+        <p>
+          <a href="https://github.com/DavidDrob/gradient-animator">github</a> |
+          <a href="https://www.producthunt.com/posts/gradient-animator-2"
+            >producthunt</a
+          >
+          |
+          <a href="https://twitter.com/0xl1ght">twitter</a>
+        </p>
+      </footer>
     </main>
   </div>
 </template>
