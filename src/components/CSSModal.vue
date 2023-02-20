@@ -157,7 +157,7 @@ const animationToggled = computed({
             >
               &nbsp;
             </div>
-            <div class="text-center" v-if="animationName === 'gradient'">
+            <div class="text-center" v-if="animationName === 'main'">
               <span> Animations </span>
               <input
                 class="h-4 w-4 border-none rounded-md my-1 cursor-pointer"

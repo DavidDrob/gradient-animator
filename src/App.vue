@@ -534,7 +534,7 @@ html {
   @apply from-lime-200 to-cyan-400;
 }
 
-#gradient {
+#gradient, #main {
   animation-name: main;
   animation-iteration-count: infinite;
   animation-duration: v-bind(animationTimeCss);
